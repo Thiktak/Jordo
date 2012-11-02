@@ -31,3 +31,11 @@ jordo:
 
     grouptype:
       name: "Nom du groupe"
+
+fos:
+  user:
+    resetting:
+      form:
+        new:
+          first: "Nouveau mot de passe"
+          second: "Confirmation"

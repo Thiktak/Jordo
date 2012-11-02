@@ -1,0 +1,15 @@
+jordo:
+  ganttbundle:
+    gantttype:
+      title: "Titre du diagramme de Gantt"
+      title_info: "Un bon titre permettra de les associer plus rapidement. Vous pouvez adopter la convention suivante : TYPE #ID (Projet #1, Event #33 - Recrutement 2012)"
+      dateStart: "Date de début"
+      dateStart_info: "A spécifier une fois le projet lancé"
+    phasetype:
+      iorder: "Numéro de phase"
+      title: "Intitulé de la phase"
+      numberDays: "Durée (en jours)"
+      numberDaysAfter: "Commencement après (en jours)"
+      description: "Description"
+      price: "Price (de la JEH)"
+      numberJeh: "Nombre de JEH"
