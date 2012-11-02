@@ -67,16 +67,16 @@
                 <dd>{{ entity.studentNumber }}&nbsp;</dd>
 
                 {% for item in doctypes %}
-                {% set n = entity.hasSubscription(item.id, year) %}
                 <dt>{{ item.title }}</dt>
                 <dd>
                   {% for y in entity.getYearsOfSubscription() %}
+                    {% set n = entity.hasSubscription(item.id, y) %}
                     {% if n %}
                   <a href="{{ path('user_subscription_show', {id: n.id}) }}" title="{{ y }} - {{ item.title }} - {{ n }}" style="{{ y != year ? 'opacity: .5' : null }}">
                     {% elseif y == year %}
                   <a href="{{ path('user_subscription_new', {user: entity.id, year: year, type: item.id}) }}">
                     {% else %}
-                  <a href="#">
+                  <a href="#" style="opacity: .5">
                     {% endif %}
                     <i class="icon-{{ arrayIndex(n, {'ok': 'ok icon-white', 'error': 'warning-sign icon-white'}, 'plus-sign') }}"></i></a>
                   {% endfor %}
