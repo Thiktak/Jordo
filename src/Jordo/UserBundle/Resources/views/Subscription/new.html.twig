@@ -1,11 +1,15 @@
 {% extends "ThiktakCoreBundle::layout.html.twig" %}
 
+{% block menu %}
+  {% render "JordoUserBundle:User:menu" %}
+{% endblock %}
+
 {% block body %}
 <section>
   <header>
     <hgroup>
-      <h1>Users</h1>
-      <h2>Papiers</h2>
+      <h1><a href="{{ path('user') }}">Users</a></h1>
+      <h2><a href="{{ path('user_subscription') }}">Papiers</a></h2>
     </hgroup>
     <aside>
       <ul>
@@ -19,9 +23,9 @@
   <article class="wbox">
     <form action="{{ path('user_subscription_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-        <p>
-            <button type="submit">Create</button>
-        </p>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
     </form>
   </article>
 </section>

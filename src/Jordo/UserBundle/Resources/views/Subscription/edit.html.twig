@@ -1,11 +1,15 @@
 {% extends "ThiktakCoreBundle::layout.html.twig" %}
 
+{% block menu %}
+  {% render "JordoUserBundle:User:menu" %}
+{% endblock %}
+
 {% block body %}
 <section>
   <header>
     <hgroup>
-      <h1>Users</h1>
-      <h2>Papiers</h2>
+      <h1><a href="{{ path('user') }}">Users</a></h1>
+      <h2><a href="{{ path('user_subscription') }}">Papiers</a></h2>
       <h3>{{ entity.type.title }} - {{ entity.user }} - {{ entity.year }}</h3>
     </hgroup>
     <aside>
@@ -21,9 +25,9 @@
     <form action="{{ path('user_subscription_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
         {{ form_widget(edit_form) }}
-        <p>
-            <button type="submit">Edit</button>
-        </p>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </div>
     </form>
   </article>
 </section>
