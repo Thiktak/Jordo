@@ -1,0 +1,16 @@
+              <table style="width: 100%;" class="table-bordered">
+                {% for entity in entities %}
+                <tr>
+                  <td class="span1" style="text-align: center;">
+                    <a href="javascript: void(0)" class="block" data-center="{{ path('report_item_save', {'id': entity.id, 'name': 'checked'}) }}"><i class="icon-ok {{ not(entity.checked) ? 'icon-white' : null }}"></i></a>
+                  </td>
+                  <td>
+                    <div class="block" style="min-height: 1.5em;" contenteditable="true" data-center="{{ path('report_item_save', {'id': entity.id, 'name': 'comment'}) }}">{{ entity.comment|raw }}</div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+
+              <a href="javascript: void(0)" data-report-add="{{guid}}" style="margin-left: 1em; opacity: .5">
+                <i class="icon-plus"></i>
+              </a>

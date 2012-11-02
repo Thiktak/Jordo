@@ -1,0 +1,38 @@
+<?php
+
+namespace Jordo\ReportBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Jordo\CalendarBundle\Entity\Event as Event;
+
+/**
+ * Jordo\ReportBundle\Entity\ReportCa
+ *
+ * @ORM\Table(name="report_ca")
+ * @ORM\Entity
+ */
+class ReportCa extends Event
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var string $type
+     *
+     * @ORM\Column(name="type", type="string", length=50)
+     */
+    protected $type;
+
+    /**
+     * @var string $reportCaItems
+     *
+     * @ORM\OneToMany(targetEntity="\Jordo\ReportBundle\Entity\ReportItem", mappedBy="reportCa")
+     */
+    protected $reportCaItems;
+}

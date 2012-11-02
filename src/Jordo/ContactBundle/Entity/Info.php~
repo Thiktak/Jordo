@@ -1,0 +1,65 @@
+<?php
+
+namespace Jordo\ContactBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Jordo\ContactBundle\Entity\Info
+ *
+ * @ORM\Table(name="contact_info")
+ * @ORM\Entity
+ */
+class Info
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var $call
+     *
+     * @ORM\OneToMany(targetEntity="\Jordo\ContactBundle\Entity\Call", mappedBy="info")
+     */
+    protected $calls;
+
+    /**
+     * @var string $type
+     *
+     * @ORM\Column(name="type", type="string", length=30)
+     */
+    protected $type;
+
+    /**
+     * @var string $value
+     *
+     * @ORM\Column(name="value", type="string", length=255)
+     */
+    protected $value;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Jordo\ContactBundle\Entity\Contact", inversedBy="info")
+     */
+    protected $contact;
+
+
+    public function __toString()
+    {
+        return (string) sprintf('%s: %s', $this->type, $this->value);
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

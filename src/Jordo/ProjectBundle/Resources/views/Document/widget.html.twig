@@ -1,0 +1,58 @@
+<article class="wbox">
+  <header>
+    <h1>Liste des documents ({{ entities|length }})</h1>
+    <aside>
+      <ul>
+        <li><a href="{{ path('project_document_new', {project: project.id}) }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+  <table style="width: 100%; text-align: center;">
+    <tr>
+      {% for i, type in types %}
+      <td style="width: {{ 100/(types|length) }}%">
+        <span style="font-size: .5em">{{ type.type }}</span>
+        {% for j, item in type.children %}
+        <a href="#{{i+1}}-{{j+1}}" class="{{ item.id is defined ? 'label label2-' ~ getStateOfComments('JordoProjectBundle:Document', item.id) : null }} block" style="border: 1px solid #aeaeae; margin: 2px; height: 3px;"></a>
+        {% endfor %}
+      </td>
+      {% endfor %}
+    </tr>
+  </table>
+  <p style="text-align: center">
+    <a onclick="$('#jordo-project-document-list-{{ project.id }}').toggle();">Plus de détails &gt;&gt;</a>
+  </p>
+  <ul id="jordo-project-document-list-{{ project.id }}" class="hide container-fluid">
+    <li class="row-fluid nav-header">
+      <div class="span7">Document</div>
+      <div class="span2">Auteur</div>
+      <div class="span2">Date</div>
+    </li>
+    {% for entity in entities %}
+    <li class="row-fluid">
+      <div class="span5"><a href="{{ path('project_document_show', {id: entity.id}) }}">{{ entity.title }}</a></div>
+      <div class="span2"><span class="label">{{ getStateOfComments('JordoProjectBundle:Document', entity.id) }}</span></div>
+      <div class="span2"><a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity.user }}</a></div>
+      <div class="span3">{{ entity.dateAdded|date('Y-m-d H:i:s') }}</div>
+    </li>
+    <li class="row-fluid">
+      <div class="span11 pull-right" style="margin-right: .5em">
+        {% render "ThiktakCommentBundle:Comment:widget" with {object: 'JordoProjectBundle:Document', id: entity.id} %}
+        <!--
+        <section class="comments">
+          <article>
+            <div class="rating">OK</div>
+            <div class="author"><a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity.user }}</a></div>
+            <div class="content">Comment 1 Comment 1 Comment 1</div>
+          </article>
+          <article>
+            <div class="author">{{ entity.user }}</div>
+            <div class="content">Comment 1</div>
+          </article>
+        </section>
+      -->
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</article>

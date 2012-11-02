@@ -1,0 +1,60 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoUserBundle:User:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Users</h1>
+      <h2>List</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li>
+          <a href="{{ path('user_new') }}"><i class="icon-plus"></i></a>
+        </li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Poste</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th style="width: 50px">Promo</th>
+                <th style="width: 50px">Filière</th>
+                <th style="width: 50px">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                  <a href="{{ path('user_show', { 'id': entity.id }) }}">{{ entity }}</a>
+                </td>
+                <td>{% for group in entity.groups %} <span>{{ group }}</span> {% endfor %}</td>
+                <td>{{ entity.phone }}</td>
+                <td>{{ entity.email }}</td>
+                <td class="center">{{ entity.promo }}</td>
+                <td class="center">{{ entity.filiere }}</td>
+                <td>
+                  <i class="icon-book {{ entity.teams|length ? '' : 'icon-white' }}" title="{{ entity.teams|length }} projet(s)"></i>
+                  {% set quality = '%.0f'|format(entity.isUpdated(doctypes, year)/(doctypes|length)*100) %}
+                  <a href="{{ path('user_show', {'id': entity.id}) }}">
+                    <i class="{{ quality == 100 ? 'icon-ok' : 'icon-time' }}" title="{{ quality }} % du dossier {{ year }} complété"></i>
+                  </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

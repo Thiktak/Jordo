@@ -1,0 +1,61 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoProjectBundle:Project:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Projets</h1>
+      <h2>Liste des projets</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('project_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Id</th>
+              <th>Title</th>
+              <th>Budget</th>
+              <th>State</th>
+              <th>Datestart</th>
+              <th>Datecreated</th>
+              <th style="width: 120px">+</th>
+          </tr>
+      </thead>
+      <tbody>
+      {% for entity in entities %}
+          <tr>
+              <td><a href="{{ path('project_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+              <td><a href="{{ path('project_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
+              <td>{{ '%.2f'|format(entity.budget + (entity.gantt ? entity.gantt.budget : 0)) }}</td>
+              <td>{{ entity.state ? ('state.' ~ entity.state)|trans : null }}</td>
+              <td>{% if entity.dateStart %}{{ entity.dateStart|date('Y-m-d H:i:s') }}{% endif %}</td>
+              <td>{% if entity.dateCreated %}{{ entity.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</td>
+              <td class="small">
+                <a style="width: 35px; display: inline-block" title="{{ entity.team|length }} intervenant(s)">
+                  <i class="icon-user"></i> {{ entity.team|length }}
+                </a>
+                <a style="width: 35px; display: inline-block" title="{{ entity.getJEH }} JEH">
+                  <i class="icon-glass"></i> {{ entity.getJEH }}
+                </a>
+                <a style="width: 35px; display: inline-block" class="small" title="{{ entity.getProgression }}% d'avancement - {{ entity.state ? ('state.' ~ entity.state)|trans : null }}">
+                  <i class="icon-{{ arrayIndex(entity.state, {'draft' : 'signal', 'devis' : 'screenshot', 'progress' : 'play-circle', 'cancel' : 'ban-circle', 'wait': 'time', 'close' : 'off'}, 'question-sign') }}"></i>
+                  {{ entity.getProgression }}%
+                </a>
+              </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Documents</h1>
+      <h2>Nouveau document</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('document_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <form action="{{ path('document_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+        <article class="wbox">
+          <header>
+            <h1>L'équipe ({{ entities|length }})</h1>
+            <aside>
+              <ul>
+                <li><a href="{{ path('project_team_new', {project: project.id}) }}"><i class="icon-plus"></i></a></li>
+              </ul>
+            </aside>
+          </header>
+          <ul>
+            {% for entity in entities %}
+            <li>
+              <a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity }}</a>
+              <a href="{{ path('project_team_show', {project: project.id, id: entity.id}) }}" class="label pull-right">{{ entity.jeh }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </article>

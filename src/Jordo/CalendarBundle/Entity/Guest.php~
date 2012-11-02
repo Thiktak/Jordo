@@ -1,0 +1,64 @@
+<?php
+
+namespace Jordo\CalendarBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Jordo\CalendarBundle\Entity\Guest
+ *
+ * @ORM\Table(name="calendar_guest")
+ * @ORM\Entity
+ */
+class Guest
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var \DateTime $dateCreated
+     *
+     * @ORM\Column(name="date_created", type="datetime")
+     */
+    protected $dateCreated;
+
+    /**
+     * @var \DateTime $dateUpdated
+     *
+     * @ORM\Column(name="date_updated", type="datetime", nullable=true)
+     */
+    protected $dateUpdated;
+
+    /**
+     * @var User $added_by
+     *
+     * @ORM\ManyToOne(targetEntity="\Jordo\CalendarBundle\Entity\Event", inversedBy="guests")
+     */
+    protected $event;
+
+    /**
+     * @var User $guests
+     *
+     * @ORM\ManyToOne(targetEntity="\Jordo\UserBundle\Entity\User", inversedBy="event")
+     */
+    protected $user;
+
+    /**
+     * @var integer $response
+     *
+     * @ORM\Column(name="response", type="smallint", nullable=true)
+     */
+    protected $response;
+
+
+    public function __construct()
+    {
+        $this->dateCreated = new \DateTime();
+    }
+}

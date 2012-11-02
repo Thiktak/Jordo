@@ -1,0 +1,24 @@
+<table class="table-bordered" style="width: 100%; background-color: white; color: black; font-size:.75em;">
+          <tr>
+            <th style="width: 200px;">Phases</th>
+            <th>
+              <span class="pull-left">&nbsp;0 jour</span>
+              <span class="pull-right">{{ maxDays }} jours&nbsp;</span>
+            </th>
+          </tr>
+  {% for phase in entity.phases %}
+  <tr>
+            <td>Phase {{ phase.iorder }} - {{ phase.title }}</td>
+            <td style="background-color: #d7d7d7; padding: 3px">
+              <div style="margin-left: {{ phase.numberDaysAfter/maxDays*100 }}%; width: {{ phase.numberDays/maxDays*100 }}%">
+                <div class="progress" style="margin: 0">
+                  <div class="bar bar-success" style="width: 100%;"></div>
+                </div>
+                <div style="text-align: center; font-size: .75em; margin-top: -2.75em; text-shadow: 0 0 3px white">
+                  [{{ phase.numberDays }} jours]
+                </div>
+              </div>
+            </td>
+  </tr>
+  {% endfor %}
+</table>

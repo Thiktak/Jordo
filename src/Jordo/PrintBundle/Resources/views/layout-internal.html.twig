@@ -1,0 +1,54 @@
+{% set _REF = _REF|default('') %}
+{% set _REDACTOR = _REDACTOR|default('') %}
+{% set _RELECTOR = _RELECTOR|default('') %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link href="{{ asset('bundles/thiktakcore/css/bootstrap.css') }}" rel="stylesheet" />
+    <style>
+      @page {
+          margin-top: 2cm;
+          margin-bottom: 2cm;
+      }
+      h1 { text-align: center; color: darkblue; margin-bottom: 1cm; border-bottom: 1px solid darkblue; }
+      h2 { color: darkblue; }
+      h3 { color: darkblue; }
+
+      .align-right { text-align: right; }
+      .data { color: gray; }
+    </style>
+    {% block stylesheets %}{% endblock %}
+  </head>
+  <body>
+<!--mpdf
+    <htmlpageheader name="header">
+      <table style="width: 100%;">
+        <tr>
+          <td style="width: 50%">IARISS</td>
+          <td style="width: 50%; text-align: right">IARISS, Junior-Entreprise de l'ENSISA</td>
+        </tr>
+      </table>
+    </htmlpageheader>
+
+    <htmlpagefooter name="footer">
+      <p style="text-align: center; font-size: 10px;">Tous droits de reproduction réservés – Usage interne uniquement</p>
+      <table style="width: 100%; text-align: center; border-top: 3px double DarkRed">
+        <tr>
+          <td style="text-align: left;">
+            {% if _REF      %}<div>Référence: {{ _REF }}</div>{% endif %}
+            {% if _RELECTOR %}<div>Rédaction: {{ _REDACTOR }}</div>{% endif %}
+          </td>
+          <td style="text-align: right">
+            <div>Page {PAGENO} sur {nbpg}<br />
+            {% if _RELECTOR %}<div>Relecture: {{ _RELECTOR }}</div>{% endif %}
+          </td>
+        </tr>
+      </table>
+    </htmlpagefooter>
+
+    <sethtmlpageheader name="header" value="on" show-this-page="1" />
+    <sethtmlpagefooter name="footer" value="on" show-this-page="1" />
+mpdf-->
+    {% block body %}{% endblock %}
+  </body>
+</html>

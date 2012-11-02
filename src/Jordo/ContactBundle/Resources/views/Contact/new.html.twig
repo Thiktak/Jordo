@@ -1,0 +1,28 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Contacts</h1>
+      <h2>Nouveau</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li>
+          <a href="{{ path('contact') }}"><i class="icon-list"></i></a>
+        </li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <form action="{{ path('contact_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Create</button>
+        </p>
+    </form>
+  </article>
+</section>
+{% endblock %}

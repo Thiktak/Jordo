@@ -1,0 +1,65 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoDocumentBundle:Document:menu" with {path: app.request.get('path')} %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Documents</h1>
+      <h2>Liste des documents</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        {% for key, filter in filters %}
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            {{ key ~ '.' ~ filter.getSelected() }} &nbsp;
+            <span class="caret pull-right"></span>
+          </a>
+          <ul class="dropdown-menu pull-right">
+            {% for item, selected in filter %}
+            <li class="{{ selected ? 'active' : null }}">
+              <a href="{{ path('document_filter', {type: key, filter: item}) }}">{{ item }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+        <li><a href="{{ path('document_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="2">Title</th>
+                <th>Date d'ajout</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                  <a href="{{ path('document_show', { 'id': entity.id }) }}">
+                    <span class="muted">{{ entity.path }}</span>
+                  </a>
+                </td>
+                <td>{{ entity.title }}</td>
+                <td>{% if entity.dateAdded %}{{ entity.dateAdded|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    {% set state = getStateOfComments('JordoDocumentBundle:Document', entity.id) %}
+                    <span class="label label2-{{ state }}">{{ state|default(' - ') }}</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

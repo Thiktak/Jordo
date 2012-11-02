@@ -1,0 +1,22 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+  <section style="padding-left: 5%; padding-right: 5%">
+    <header>
+      <hgroup>
+        <h1>Accueil</h1>
+      </hgroup>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span8">
+          {% render "ThiktakCoreBundle:Notify:widget" %}
+        </div>
+        <div class="span4">
+          {% render "JordoCalendarBundle:Calendar:widget" %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

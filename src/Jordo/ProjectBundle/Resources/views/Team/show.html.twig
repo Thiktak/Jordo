@@ -1,0 +1,43 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Projets</h1>
+      <h2>{{ project }}</h2>
+      <h3>Team</h3>
+      <h4>{{ entity }}</h4>
+    </hgroup>
+    <aside>
+      <ul>
+        <li>
+          <a href="{{ path('project_show', {'id': app.request.get('project')}) }}"><i class="icon-list"></i></a>
+        </li>
+        <li>
+          <a href="{{ path('project_team_edit', {'project': app.request.get('project'), 'id' : entity.id}) }}"><i class="icon-edit"></i></a>
+        </li>
+      </ul>
+    </aside>
+  </header>
+
+  <article>
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Jeh</th>
+                <td>{{ entity.jeh }}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ entity.comment }}</td>
+            </tr>
+        </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="thiktak.core.form" class="Thiktak\CoreBundle\Services\FormService">
+            <argument type="service" id="request" strict="false" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
+        <service id="thiktak.core.orm" class="Thiktak\CoreBundle\Services\OrmService">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
+        <service id="thiktak.core.notify" class="Thiktak\CoreBundle\Services\NotifyService">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.context" />
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="thiktak.twig.core" class="Thiktak\CoreBundle\Twig\CoreExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="thiktak.twig.notify" class="Thiktak\CoreBundle\Twig\NotifyExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="service_container" />
+        </service>
+    </services>
+
+    <!--<parameters>
+        <parameter key="thiktak.core.form">Thiktak\CoreBundle\Services\FormService</parameter>
+    </parameters>
+    <parameters>
+        <parameter key="thiktak_core.example.class">Thiktak\CoreBundle\Example</parameter>
+    </parameters>
+
+    <services>
+        <service id="thiktak_core.example" class="%thiktak_core.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+</container>

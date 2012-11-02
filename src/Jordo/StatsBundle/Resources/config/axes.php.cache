@@ -1,0 +1,68 @@
+<?php $axis = array (
+  'X' => 
+  array (
+    'Thiktak\\CoreBundle\\Controller\\StatistiquesController::defineAxisNofNotifications' => 
+    array (
+      'text' => 'NofNotifications',
+      'id' => 'Thiktak\\CoreBundle\\Controller\\StatistiquesController::defineAxisNofNotifications',
+      'class' => 
+      array (
+        0 => 'Thiktak\\CoreBundle\\Controller\\StatistiquesController',
+        1 => 'defineAxisNofNotifications',
+      ),
+    ),
+    'Jordo\\ProjectBundle\\Controller\\StatistiquesController::defineAxisNumberOfProjects' => 
+    array (
+      'text' => 'NumberOfProjects',
+      'id' => 'Jordo\\ProjectBundle\\Controller\\StatistiquesController::defineAxisNumberOfProjects',
+      'class' => 
+      array (
+        0 => 'Jordo\\ProjectBundle\\Controller\\StatistiquesController',
+        1 => 'defineAxisNumberOfProjects',
+      ),
+    ),
+    'Jordo\\ProjectBundle\\Controller\\StatistiquesController::defineAxisNumberOfProjectsByType' => 
+    array (
+      'text' => 'NumberOfProjectsByType',
+      'id' => 'Jordo\\ProjectBundle\\Controller\\StatistiquesController::defineAxisNumberOfProjectsByType',
+      'class' => 
+      array (
+        0 => 'Jordo\\ProjectBundle\\Controller\\StatistiquesController',
+        1 => 'defineAxisNumberOfProjectsByType',
+      ),
+    ),
+    'Jordo\\ContactBundle\\Controller\\StatistiquesController::defineAxisNofContacts' => 
+    array (
+      'text' => 'NofContacts',
+      'id' => 'Jordo\\ContactBundle\\Controller\\StatistiquesController::defineAxisNofContacts',
+      'class' => 
+      array (
+        0 => 'Jordo\\ContactBundle\\Controller\\StatistiquesController',
+        1 => 'defineAxisNofContacts',
+      ),
+    ),
+    'Jordo\\ContactBundle\\Controller\\StatistiquesController::defineAxisNofContactsByType' => 
+    array (
+      'text' => 'NofContactsByType',
+      'id' => 'Jordo\\ContactBundle\\Controller\\StatistiquesController::defineAxisNofContactsByType',
+      'class' => 
+      array (
+        0 => 'Jordo\\ContactBundle\\Controller\\StatistiquesController',
+        1 => 'defineAxisNofContactsByType',
+      ),
+    ),
+    'Jordo\\ContactBundle\\Controller\\StatistiquesController::defineAxisNofCalls' => 
+    array (
+      'text' => 'NofCalls',
+      'id' => 'Jordo\\ContactBundle\\Controller\\StatistiquesController::defineAxisNofCalls',
+      'class' => 
+      array (
+        0 => 'Jordo\\ContactBundle\\Controller\\StatistiquesController',
+        1 => 'defineAxisNofCalls',
+      ),
+    ),
+  ),
+  'Y' => 
+  array (
+  ),
+); ?>

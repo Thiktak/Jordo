@@ -1,0 +1,80 @@
+{% extends "JordoPrintBundle::layout-internal.html.twig" %}
+
+{% block body %}
+<h1>
+  Fiche de suivi de projet<br />
+  Projet #{{ entity.id }} - {{ entity.title }}
+</h1>
+
+<table style="width: 100%; vertical-align: top">
+  <tr>
+    <th colspan="2">Dates</th>
+    <th colspan="2">Budget</th>
+  </tr>
+  <tr>
+    <td style="width: 25%" class="data align-right">Fin prévisionnelle  :</td>
+    <td style="width: 25%"></td>
+    <td style="width: 25%" class="data align-right">Nombre de JEH :</td>
+    <td style="width: 25%"></td>
+  </tr>
+  <tr>
+    <td class="data align-right">Début (signature AP) :</td>
+    <td></td>
+    <td class="data align-right">Nombre d'intervenants :</td>
+    <td>{{ entity.team|length }}</td>
+  </tr>
+  <tr>
+    <td class="data align-right">Cloture (signature BV) :</td>
+    <td></td>
+    <td class="data align-right">Prix HT :</td>
+    <td>{{ entity.budget + (entity.gantt ? entity.gantt.budget : 0) }} €<br />
+      <em style="font-size: 10px">(= {{ entity.budget }} + {{ entity.gantt ? entity.gantt.budget : 0 }})</em></td>
+  </tr>
+  <tr>
+    <td class="data align-right"></td>
+    <td></td>
+    <td class="data align-right">Prix TTC :</td>
+    <td> {{ (entity.budget + (entity.gantt ? entity.gantt.budget : 0))*1.196 }} €</td>
+  </tr>
+</table>
+
+<h2>Les contacts</h2>
+<table style="width: 100%; vertical-align: top">
+  <tr>
+    <th colspan="2">Client</th>
+    <th colspan="2">IARISS</th>
+  </tr>
+  <tr>
+    <td style="width: 20%" class="data align-right">Contact  :</td>
+    <td style="width: 30%">
+      <strong>{{ entity.contact }}</strong><br />
+      {% for info in entity.contact.infos %}
+      <div>{{ info }}</div>
+      {% endfor %}
+    </td>
+    <td style="width: 20%" class="data align-right">Contact :</td>
+    <td style="width: 30%"></td>
+  </tr>
+</table>
+
+<br />
+
+<h2>Description</h2>
+<p>{{ entity.description }}</p>
+
+<br />
+
+<h2>Diagramme de Gantt</h2>
+{% if entity.gantt %}
+{% render "JordoGanttBundle:Gantt:widget" with {id: entity.gantt.id} %}
+{% endif %}
+
+<br />
+
+<h2>Les intervenants</h2>
+{% for team in entity.team %}
+<div>&nbsp;&nbsp;-&nbsp; {{ team }} pour {{ team.jeh }} JEH</div>
+{% endfor %}
+
+
+{% endblock %}

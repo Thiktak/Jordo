@@ -1,13 +1,289 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}ERP{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link href="{{ asset('bundles/thiktakcore/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/thiktakcore/css/bootstrap-responsive.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/thiktakcore/css/jquery-lionbars.css') }}" rel="stylesheet" />
+    <style>
+      body { /*padding-top: 60px;*/ background-color: black; }
+
+      /** NAV **/
+      #nav { width: 75px; text-align: center; }
+      #nav ul { margin: 0; padding: 0; }
+      #nav li { margin: 0; padding: 0; list-style-type: none; padding: 5px; width: 50px; height: 50px; margin: 5px; font-size: .5em; display: inline-block; }
+      #nav li a { display: inline-block; color: white; }
+
+      /** NAVLIST **/
+      .navlist { background-color: #121212; border: 1px solid #141414; box-shadow: 2px 0 2px #404040; }
+      .navlist h1 { 
+        margin: 0;
+        padding: 4px;
+        font-size: 1em;
+        color: white;
+        line-height: 1.5em;
+        background: #454545; /* Old browsers */
+        background: -moz-linear-gradient(top,  #454545 0%, #2E2E2E 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#454545), color-stop(36%,#828c95), color-stop(100%,#2E2E2E)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #454545 0%,#2E2E2E 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #454545 0%,#2E2E2E 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #454545 0%,#2E2E2E 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #454545 0%,#2E2E2E 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#454545', endColorstr='#2E2E2E',GradientType=0 ); /* IE6-9 */
+        border-bottom: 1px solid #050505;
+      }
+      .navlist ul { margin: 0; padding: 0; color: gray; }
+      .navlist ul li {
+        margin: 0;
+        padding: 4px;
+        padding-left: 4px;
+        list-style-type: none;
+        background-color: #121212;
+        background: #121212; /* Old browsers */
+        background: -moz-linear-gradient(top,  #121212 0%, #141414 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#121212), color-stop(36%,#828c95), color-stop(100%,#141414)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #121212 0%,#141414 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #121212 0%,#141414 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #121212 0%,#141414 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #121212 0%,#141414 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#121212', endColorstr='#141414',GradientType=0 ); /* IE6-9 */
+        border-bottom: 1px solid #0d0d0d;
+        border-top: 1px solid #181818;
+      }
+      .navlist li a { display: block; color: inherit; margin: -4px; padding: 4px; padding-left: 10px; }
+      .navlist li > a:hover, .navlist li a.active {
+        color: white; text-decoration: none;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+        background-color: #0088cc;
+      }
+
+
+      /** SECTION - content **/
+      #container > section { overflow: auto; padding: 1em; background-color: #eaeaea; border-left: 1px solid gray; }
+      #container > section header hgroup * { margin: 0; padding: 0; font-size: 1em; line-height: 1em; }
+      #container > section header hgroup a { color: inherit; text-decoration: underline; }
+      #container > section > header { margin-bottom: 1em; position: relative; }
+      #container > section > header hgroup > * { display: inline; color: gray; text-shadow: 0 0 3px gray; opacity: .5; }
+      #container > section > header hgroup > *:last-child { display: block; font-size: 2em; opacity: 1; }
+      #container > section > header hgroup > *:not(:first-child):before { content: " - "; }
+      #container > section > header hgroup > *:last-child:before { content: ""; }
+      #container > section > header aside { position: absolute; top: 0; right: 0; bottom: 0; }
+      #container > section > header aside ul { margin: 0; padding: 0; }
+      #container > section > header aside li { margin: 0; padding: 5px; list-style-type: none; display: block; float: left; }
+      #container > section > header aside a { text-align: center; line-height: 2em; min-width: 1.5em; font-size: .75em; margin: 0; padding: 3px 10px; opacity: .5; color: black; display: block; }
+      #container > section > header aside a:hover { opacity: 1; text-decoration: none; background-color: white; }
+
+      #container > section .container-fluid { position: relative; padding: 0; margin: 0em; margin-top: 0; }
+
+      #container > section article > form { }
+
+      form * { vertical-align: top; }
+      form div > label { display: inline-block; width: 250px; text-align: right; padding-right: 15px; color: gray; }
+      form div { display: inline-block; }
+      form > div { display: block; }
+      form > div > div { padding: 1em; display: block; border-bottom: 1px solid #eaeaea; }
+      form > p { text-align: right; padding: 1em; margin-bottom: -1.4em; background-color: #aeaeae; }
+      form textarea { width: 50%; height: 150px; }
+      form label.required:after { content: '*'; color: red; }
+
+      .wbox {
+        margin-bottom: 2em;
+        border: 1px solid #ccc;
+        -moz-border-radius: 4px; -o-border-radius: 4px; -ms-border-radius: 4px; border-radius: 4px;
+        -webkit-box-shadow: 0px 0px 5px 4px #ebebeb; -moz-box-shadow: 0px 0px 5px 4px #ebebeb; box-shadow: 0px 0px 5px 4px #ebebeb;
+        background-color: white;
+       }
+      .wbox > header {
+        position: relative;
+        color: #555;
+        padding: 5px 20px;
+        font-weight: bold;
+        text-shadow: 0 1px #fff;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f1f1f1), color-stop(70%, #dfdfdf), olor-stop(100%, #dadada));
+        background-image: -webkit-linear-gradient(top, #f1f1f1 0%, #dfdfdf 70%, #dadada 100%);
+        background-image: -moz-linear-gradient(top, #f1f1f1 0%, #dfdfdf 70%, #dadada 100%);
+        background-image: -ms-linear-gradient(top, #f1f1f1 0%, #dfdfdf 70%, #dadada 100%);
+        background-image: -o-linear-gradient(top, #f1f1f1 0%, #dfdfdf 70%, #dadada 100%);
+        background-image: linear-gradient(top, #f1f1f1 0%, #dfdfdf 70%, #dadada 100%);
+      }
+
+      .ubox {
+        background-color: #454545;
+        margin-left: -1em; margin-right: -1em; margin-bottom: 2em;
+        padding: 0em;
+        box-shadow: 0 0 3px black;
+        color: white;
+      }
+
+      .ubox .container-fluid { margin: 0; padding: 0; }
+      .ubox a { color: inherit; }
+
+      .small { font-size: .75em; }
+
+      #container > section article > header h1 { margin: 0; padding: 0; font-size: 1em; line-height: 1em; }
+      #container > section article > header aside { position: absolute; top: 0; right: 0; bottom: 0; }
+      #container > section article > header ul { margin: 0; padding: 0; }
+      #container > section article > header li { margin: 0; padding: 0; list-style-type: none; display: block; float: left; }
+      #container > section article > header aside a { text-align: center; min-width: 1.5em; font-size: .75em; margin: 0; padding: 2px; opacity: .5; color: black; display: block; }
+      #container > section article > header aside a:hover { opacity: 1; background-color: rgba(255, 255, 255, .5); }
+      #container > section article > div, .wbox > ul,
+      #container > section article > table { margin: 0; }
+      #container > section > article > div, .wbox > ul { padding: .5em; }
+
+      .wbox > ul { margin: 0; padding: 0; }
+      .wbox > ul > li { margin: 0; padding: 2px 5px; list-style-type: none; }
+      .wbox > ul > li:not(:last-child) { border-bottom: 1px solid #eaeaea; }
+
+
+      table td.actions ul { margin: 0; padding: 0; }
+      table thead th { color: #d7d7d7; text-transform: uppercase; overflow: auto; font-size: .75em; line-height: 1em; }
+      
+
+      /** SKELETON **/
+      #container > * { position: absolute; top: 40px; bottom: 0; }
+      /*#container > section { left: 0; right: 0; }*/
+      #container > *:nth-child(1) { z-index: 500; left: 0;    min-width: 75px; display: none; }
+      #container > *:nth-child(2) { z-index: 400; left: 0px; min-width: 200px; }
+      #container > *:nth-child(3) { z-index: 300; left: 200px; min-width: 200px; overflow: auto; }
+      #container > *:nth-child(4) { z-index: 200; left: 400px; overflow: auto; }
+      #container > *:last-child { z-index: 100; right: 0; overflow: auto; }
+
+      #container > .navlist { border-left: 1px solid black; z-index: 500; }
+
+
+
+      /** DESIGN **/
+      #container > section { background-image: url('{{ asset('bundles/thiktakcore/images/background2.png') }}'); }
+
+
+
+      .dl-horizontal dt { width: 120px; opacity: .5; }
+      .dl-horizontal dd { margin-left: 130px; }
+
+      form div[id*="date"] select { width: 75px; }
+
+      ul.list { margin: .5em; padding: 0; text-align: center; }
+      ul.list li { margin: 1%; padding: 0; list-style-type: none; display: inline-block; }
+
+      ul.ul-list { margin: 0; padding: 0; }
+      ul.ul-list li { margin: 0; padding: 0; list-style-type: none; }
+      ul.ul-list li:not(:last-child) { border-bottom: 1px solid #d7d7d7; }
+
+      ul.ul-items { margin: 1em; padding: 0; text-align: center; }
+      ul.ul-items li { margin: 1%; padding: 0; display: inline-block; width: 18%; text-align: left; }
+
+      .block { display: block; }
+
+      .navbar .nav li.divider-vertical { margin: 0; }
+
+
+      section.comments { border: 1px solid lightblue; }
+      section.comments article { margin: 1px; padding: .5em; background-color: lightblue; font-size: .75em; }
+      section.comments article .author  { margin: 0; padding: 0; font-weight: bold; }
+      section.comments article .content { margin: 0; padding: 0; padding-left: 1em; }
+      section.comments article .rating  { float: right; }
+
+      form.comment { padding: 5px; margin: 0; vertical-align: middle; }
+      form.comment div { }
+      form.comment label { display: none; }
+      form.comment textarea { width: 98%; }
+      form.comment div { margin: 2px; display: inline; }
+
+      form { margin: 0; }
+      form .form-actions { margin: 0; text-align: right; }
+
+      .progress *[class*="label2"] { background: none; background-image: none; }
+      .progress .label2-ok, .label2-ok           { background-color: rgb(98, 196, 98); }
+      .progress .label2-error, .label2-error     { background-color: red; }
+      .progress .label2-restart, .label2-restart { background-color: orange; }
+      .progress .label2-todo, .label2-todo       { background-color: lightblue; }
+
+      .center { text-align: center; }
+      .right { text-align: right; }
+
+
+      .ui-autocomplete {
+        padding: 0;
+        list-style: none;
+        background-color: #fff;
+        width: 210px;
+        border: 1px solid #B0BECA;
+        max-height: 350px;
+        overflow-y: scroll;
+      }
+      .ui-autocomplete .ui-menu-item a {
+        border-top: 1px solid #B0BECA;
+        display: block;
+        padding: 4px 6px;
+        color: #353D44;
+        cursor: pointer;
+      }
+      .ui-autocomplete .ui-menu-item:first-child a {
+        border-top: none;
+      }
+      .ui-autocomplete .ui-menu-item a.ui-state-hover {
+        background-color: #D5E5F4;
+        color: #161A1C;
+      }
+    </style>
+  </head>
+  <body>
+    {% block all_body %}{% endblock %}
+
+    <div class="">
+      <div class="modal hide" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header" style="overflow: auto; max-height: 2em;">
+              <a class="close" data-dismiss="modal">×</a>
+              <div class="content"><h3>Titre</h3></div>
+          </div>
+          <div class="modal-body" style="font-size: .75em">
+              <p>Contenu...</p>
+          </div>
+          <!--<div class="modal-footer">
+              <a href="#" class="btn" data-dismiss="modal">Close</a>
+              <a href="#" class="btn btn-primary">Save changes</a>
+          </div>-->
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="{{ asset('bundles/thiktakcore/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/thiktakcore/js/jquery-lionbars.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+    <script>
+      $(document).ready(function() {
+        $('#container > nav').each(function() {
+          $(this).lionbars();
+        });
+
+        link = window.location.pathname + (window.location.search ? window.location.search : '');
+
+        $('a[href="' + link + '"]').each(function() {
+          $(this).addClass('active');
+        });
+
+      });
+      $('div#modal').modal('hide');
+
+      $('a[data-modal]').click(function() {
+          var url = $(this).attr('href') + ' section';
+          $('div#modal .modal-body').load(url, function(datas) {
+              $('div#modal .modal-header .content').html($(datas).find('section > header'));
+              $('div#modal .modal-body').html($(datas).find('section > article'));
+
+              $('div#modal').modal({
+                keyboard:true,
+                backdrop:true
+              }).modal('show');
+          });
+          return false;
+      });
+    </script>
+  </body>
 </html>

@@ -1,0 +1,99 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Gantt</h1>
+      <h2>{{ entity.id }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('gantt') }}"><i class="icon-list"></i></a></li>
+        <li><a href="{{ path('gantt_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="ubox contianer-fluid">
+    <div class="row-fluid">
+      <div class="span8">
+        {% render "JordoGanttBundle:Gantt:widget" with {id: entity.id} %}
+      </div>
+      <div class="span4">
+        <table class="record_properties">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ entity.id }}</td>
+                </tr>
+                <tr>
+                    <th>Datestart</th>
+                    <td>{{ entity.dateStart|date('Y-m-d H:i:s') }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre de JEH</th>
+                    <td>{{ entity.numberJEH }}</td>
+                </tr>
+                <tr>
+                    <th>Prix total</th>
+                    <td>{{ entity.budget }} €</td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+
+  <article class="wbox">
+    <header>
+      <hgroup>
+        <h1>Les phases ({{ entity.phases|length }})</h1>
+      </hgroup>
+      <aside>
+        <ul>
+          <li>
+            <a href="{{ path('gantt_phase_new', {gantt: entity.id}) }}"><i class="icon-plus"></i> Ajouter une phase</a>
+          </li>
+        </ul>
+      </aside>
+    </header>
+    <table class="table">
+      <thead>
+        <tr>
+            <th>Phase</th>
+            <th style="width: 100px">Débute après</th>
+            <th style="width: 100px">Durée</th>
+            <th style="width: 100px">Price</th>
+            <th style="width: 50px">JEH</th>
+            <th style="width: 50px">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for phase in entity.phases %}
+          <tr>
+              <td>
+                <strong><span class="label label-important">Phase {{ phase.iorder }}</span> - {{ phase.title }}</strong>
+                <p style="margin-left: 2em">{{ phase.description }}</p>
+              </td>
+              <td>
+                {{ phase.numberDaysAfter }} jour(s)
+                <span class="muted block small">{{ '%d'|format(phase.numberDaysAfter/7) }} semaine(s)</span>
+              </td>
+              <td>
+                {{ phase.numberDays }} jour(s)
+                <span class="muted block small">{{ '%d'|format(phase.numberDays/7) }} semaine(s)</span>
+              </td>
+              <td>{{ phase.price }}</td>
+              <td>{{ phase.numberJeh }}</td>
+              <td>
+                <a href="{{ path('gantt_phase_edit', { 'id': phase.id }) }}"><i class="icon-edit"></i></a>
+              </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+
+</section>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoCalendarBundle:Index:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1><a href="{{ path('calendar') }}">Calendrier</a></h1>
+      <h2>Evénement</h2>
+      <h3>le {{ entity.dateStart|date('Y-m-d H:i:s') }} - {{ entity.title }}</h3>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('calendar_event_new') }}"><i class="icon-plus"></i></a></li>
+        <li><a href="{{ path('calendar_event_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="ubox small">
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span4">
+          <dl class="dl-horizontal">
+            <dt></dt>
+            <dd>{{ entity.title }}</dd>
+
+            <dt>Du</dt>
+            <dd>{{ entity.dateStart|date('Y-m-d H:i:s') }}</dd>
+            
+            <dt>au</dt>
+            <dd>{{ entity.dateEnd|date('Y-m-d H:i:s') }}</dd>
+
+            <dt>ToDo ?</dt>
+            <dd>{{ entity.isTodo ? 'oui' : 'non' }}</dd>
+
+            <dt>Evenement ouvert ?</dt>
+            <dd>{{ entity.isOpen ? '<span class="label label-success">oui</span>' : 'non'|raw }}</dd>
+          </dl>
+        </div>
+        <div class="span4">
+          <br />
+          <p>{{ entity.description }}</p>
+        </div>
+        <div class="span4 small">
+          <dl class="dl-horizontal">
+            <dt>Crée le</dt>
+            <dd>{{ entity.dateCreated|date('Y-m-d H:i:s') }}</dd>
+            
+            <dt>Par</dt>
+            <dd><a href="{{ path('user_show', {id: entity.addedBy.id}) }}">{{ entity.addedBy }}</a></dd>
+
+            <dt>Modifié le</dt>
+            <dd>{{ entity.dateUpdated|date('Y-m-d H:i:s') }}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span2">
+        <article class="wbox">
+          <header>
+            <h1>Participants ({{ entity.guests|length }})</h1>
+          </header>
+          {% set rep = entity.isIntoGuests(app.user) %}
+          <div class="center">
+            {% if entity.isOpen %}
+            <div class="btn-group" style="margin: 10px 0">
+              {% if rep %}
+              <a href="{{ path('calendar_event_subscribe', {guest: rep.id, response: 1}) }}" class="btn-small btn {{rep and rep.response == 1 ? 'btn-success' : null}}">Oui</a>
+              <a href="{{ path('calendar_event_subscribe', {guest: rep.id, response: 3}) }}" class="btn-small btn {{rep and rep.response == 3 ? 'btn-warning' : null}}">Peut-être</a>
+              <a href="{{ path('calendar_event_subscribe', {guest: rep.id, response: 2}) }}" class="btn-small btn {{rep and rep.response == 2 ? 'btn-danger' : null}}">Non</a>
+              {% else %}
+              <a href="{{ path('calendar_event_subscribe_new', {event: entity.id, response: 1}) }}" class="btn-small btn">Oui</a>
+              <a href="{{ path('calendar_event_subscribe_new', {event: entity.id, response: 3}) }}" class="btn-small btn">Peut-être</a>
+              <a href="{{ path('calendar_event_subscribe_new', {event: entity.id, response: 2}) }}" class="btn-small btn">Non</a>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+          <ul>
+            <li class="nav-header">Oui ({{ entity.getGuestsByResponse(1)|length }})</li>
+            {% for g in entity.getGuestsByResponse(1) %}
+            <li><a href="{{ path('user', {id: g.user.id}) }}">{{ g.user }}</a></li>
+            {% endfor %}
+
+            <li class="nav-header">Peut-être ({{ entity.getGuestsByResponse(3)|length }})</li>
+            {% for g in entity.getGuestsByResponse(3) %}
+            <li><a href="{{ path('user', {id: g.user.id}) }}">{{ g.user }}</a></li>
+            {% endfor %}
+
+            <li class="nav-header">Non ({{ entity.getGuestsByResponse(2)|length }})</li>
+            {% for g in entity.getGuestsByResponse(2) %}
+            <li><a href="{{ path('user', {id: g.user.id}) }}">{{ g.user }}</a></li>
+            {% endfor %}
+
+            <li class="nav-header">Sans réponse ({{ entity.getGuestsByResponse(0)|length }})</li>
+            {% for g in entity.getGuestsByResponse(0) %}
+            <li><a href="{{ path('user', {id: g.user.id}) }}">{{ g.user }}</a></li>
+            {% endfor %}
+          </ul>
+        </article>
+      </div>
+
+      <div class="span10">
+
+        <div class="well">
+          {{ entity.description }}
+        </div>
+
+        <article class="wbox">
+          <header>
+            <h1>Commentaires</h1>
+          </header>
+          <ul>
+
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+
+</section>
+{% endblock %}

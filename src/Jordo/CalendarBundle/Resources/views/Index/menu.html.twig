@@ -1,0 +1,37 @@
+    <ul class="l1">
+      <li><a href="{{ path('calendar_event_new') }}"><i class="icon-plus"></i> Ajouter un événement</a></li>
+    </ul>
+
+    <h1>Les calendriers</h1>
+    <ul class="l1 nav-list">
+      {% for entity in entities %}
+      <li class="dropdown">
+        <a href="{{ path('calendar_filter_toggle', {filter: entity.id}) }}" class="pull-left">
+          <span  class="{{ entity.state ? 'event-' ~ entity.id : null }}" style="border: 1px dashed white; width: .5em; height: .5em; border-radius: 5px; display: inline-block;">
+            &nbsp;
+          </span>
+        </a>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="margin-left: 20px">
+          {{ entity.id }}
+          <span class="caret pull-right"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            <a href="{{ path('calendar_filter_toggle', {filter: entity.id}) }}">Activer/désactiver le calendrier</a>
+          </li>
+          <li>
+            <a href="{{ path('calendar_show', {id: entity.id}) }}">Afficher tous les évènements</a>
+          </li>
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+
+{% block stylesheets %}
+<style>
+  {% for entity in entities %}
+  .event-{{ entity.id }} { border: none; overflow: hidden; background: {{ entity.color }}; }
+  .event-{{ entity.id }} div { padding-left: 1px; border: none; background: {{ entity.color }}; }
+  {% endfor %}
+</style>
+{% endblock %}

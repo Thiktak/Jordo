@@ -1,0 +1,37 @@
+    <ul class="l1">
+      <li><a href="{{ path('call_new') }}"><i class="icon-plus"></i> Ajouter un appel</a></li>
+      <li><a href="{{ path('contact_new') }}"><i class="icon-plus"></i> Ajouter un contact</a></li>
+    </ul>
+
+    <h1>Filtres</h1>
+    <ul class="l1">
+      {% for key, filter in filters %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          {{ ('filter.' ~ key ~ '.' ~ filter.getSelected())|trans }}
+          <span class="caret pull-right"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          {% for item, selected in filter %}
+          <li class="{{ selected ? 'active' : null }}">
+            <a href="{{ path('contact_filter', {type: key, filter: item}) }}">
+              {{ ('filter.' ~ key ~ '.' ~ item)|trans }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h1><a href="{{ path('contact') }}">Tous les contacts ({{ entities|length }})</a></h1>
+    <ul class="l1 nav-list">
+      {% for entity in entities %}
+      <li>
+        <a href="{{ path('contact_show', {id: entity.id}) }}">
+          {%if entity.hasProjects() %}<i class="icon-star icon-white" title="{{ entity.hasProjects() }} projet(s)"></i>{% endif %}
+         {{ entity }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>

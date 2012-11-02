@@ -1,0 +1,38 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Groupes</h1>
+      <h2>Edition</h2>
+      <h3>{{ entity }}</h3>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('group') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <form action="{{ path('group_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT" />
+        {{ form_widget(edit_form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </div>
+    </form>
+  </article>
+
+  <article class="wbox">
+    <header>
+      <h1>Edition des rôles</h1>
+    </header>
+    {% render "JordoUserBundle:Role:widget" with {type: 'group', id: entity.id} %}
+  </article>
+</section>
+{% endblock %}

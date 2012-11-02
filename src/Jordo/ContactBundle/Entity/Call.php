@@ -1,0 +1,212 @@
+<?php
+
+namespace Jordo\ContactBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Jordo\CalendarBundle\Entity\Event as BaseEvent;
+
+/**
+ * Jordo\CalendarBundle\Entity\Event
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="contact_call")
+ */
+class Call extends BaseEvent
+{
+    /**
+     * @var $info
+     *
+     * @ORM\ManyToOne(targetEntity="\Jordo\ContactBundle\Entity\Info", inversedBy="calls")
+     */
+    protected $info;
+
+    /**
+     * @var integer $id
+     */
+    protected $id;
+
+    /**
+     * @var \DateTime $dateCreated
+     */
+    protected $dateCreated;
+
+    /**
+     * @var \DateTime $dateUpdated
+     */
+    protected $dateUpdated;
+
+    /**
+     * @var \DateTime $dateStart
+     */
+    protected $dateStart;
+
+    /**
+     * @var \DateTime $dateEnd
+     */
+    protected $dateEnd;
+
+    /**
+     * @var string $title
+     */
+    protected $title;
+
+    /**
+     * @var string $description
+     */
+    protected $description;
+
+    /**
+     * @var boolean $isTodo
+     */
+    protected $isTodo;
+
+    /**
+     * @var Jordo\UserBundle\Entity\User
+     */
+    protected $addedBy;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $guests;
+
+    /**
+     * @var string $callback
+     *
+     * @ORM\Column(name="date_callback", type="date", nullable=true)
+     */
+    protected $dateCallback;
+
+    /**
+     * @var string $state
+     *
+     * @ORM\Column(name="state", type="string", length=50)
+     */
+    protected $state;
+    
+    /**
+     * @var boolean $isOpen
+     */
+    protected $isOpen;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->dateCallback = new \DateTime();
+        $this->dateCallback->modify('+3 month');
+    }
+
+    public function __toString()
+    {
+        return (string) sprintf('[%s] %s', strtoupper($this->getSpecialType()), $this->getInfo()->getContact());
+    }
+
+    public function getSpecialType()
+    {
+        $type = $this->getInfo()->getType();
+        return strstr($type, '_', true) ?: $type;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set info
+     *
+     * @param Jordo\ContactBundle\Entity\Info $info
+     * @return Call
+     */
+    public function setInfo(\Jordo\ContactBundle\Entity\Info $info = null)
+    {
+        $this->info = $info;
+    
+        return $this;
+    }
+
+    /**
+     * Get info
+     *
+     * @return Jordo\ContactBundle\Entity\Info 
+     */
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     * @return Call
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set isOpen
+     *
+     * @param boolean $isOpen
+     * @return Call
+     */
+    public function setIsOpen($isOpen)
+    {
+        $this->isOpen = $isOpen;
+    
+        return $this;
+    }
+
+    /**
+     * Get isOpen
+     *
+     * @return boolean 
+     */
+    public function getIsOpen()
+    {
+        return $this->isOpen;
+    }
+
+    /**
+     * Set dateCallback
+     *
+     * @param \DateTime $dateCallback
+     * @return Call
+     */
+    public function setDateCallback($dateCallback)
+    {
+        $this->dateCallback = $dateCallback;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateCallback
+     *
+     * @return \DateTime 
+     */
+    public function getDateCallback()
+    {
+        return $this->dateCallback;
+    }
+}

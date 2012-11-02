@@ -1,0 +1,258 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoProjectBundle:Project:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Projets</h1>
+      <h2>{{ entity }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('project') }}"><i class="icon-list"></i></a></li>
+        <li><a href="{{ path('project_new') }}"><i class="icon-plus"></i></a></li>
+        <li><a href="{{ path('project_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a></li>
+        <li><a href="{{ path('project_show', { 'id': entity.id, '_format': 'pdf' }) }}" class="btn btn-inverse"><i class="icon-print icon-white"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="ubox contianer-fluid">
+    <div class="row-fluid">
+      <div class="span8">
+        {% if entity.gantt %}
+        {% render "JordoGanttBundle:Gantt:widget" with {id: entity.gantt.id, '_format': 'html'} %}
+        {% endif %}
+      </div>
+      <div class="span4" style="font-size: .75em">
+        <dl class="dl-horizontal">
+          <dt>Etat</dt>
+          <dd class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              {{ ('state.' ~ entity.state)|trans }}
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="nav-header">Changer l'état du projet</li>
+              <li><a href="{{ path('project_state_set', {project: entity.id, state: 'draft'}) }}">{{ 'state.draft'|trans }}</a></li>
+              <li><a href="{{ path('project_state_set', {project: entity.id, state: 'devis'}) }}">{{ 'state.devis'|trans }}</a></li>
+              <li><a href="{{ path('project_state_set', {project: entity.id, state: 'wait'}) }}">{{ 'state.wait'|trans }}</a></li>
+              <li><a href="{{ path('project_state_set', {project: entity.id, state: 'progress'}) }}">{{ 'state.progress'|trans }}</a></li>
+            {% if is_granted("ROLE_ADMIN") %}
+              <li>
+                <a href="{{ path('project_state_set', {project: entity.id, state: 'cancel'}) }}">{{ 'state.cancel'|trans }}</a>
+              </li>
+              <li>
+                <a href="{{ path('project_state_set', {project: entity.id, state: 'close'}) }}">{{ 'state.close'|trans }}</a>
+              </li>
+            {% else %}
+              <li class="disabled"><i class="icon-lock"></i> {{ 'state.cancel'|trans }}</li>
+              <li class="disabled"><i class="icon-lock"></i> {{ 'state.close'|trans }}</li>
+            {% endif %}
+            </ul>
+          </dd>
+
+          <dt>Avancement</dt>
+          <dd>
+            <div class="progress" style="margin: 0 .5em; height: 1em; width: 60%">
+              {% set width = '%2.2f'|format(1/(nbdoctypes)*100) %}
+              {% for type in types %}
+                {% for item in type.children %}
+                  {#% if item|length > 0 %}
+                    {% if item.state == 'ok' %}
+                      {% set bartype = 'bar bar-success' %}
+                    {% elseif item.state == 'warning' %}
+                      {% set bartype = 'bar bar-warning' %}
+                    {% elseif item.state == 'error' %}
+                      {% set bartype = 'bar bar-success' %}
+                    {% else %}
+                      {% set bartype = 'bar' %}
+                    {% endif %}
+                  {% endif %#}
+                {% set label = item.id is defined ? getStateOfComments('JordoProjectBundle:Document', item.id) : null %}
+              <div class="{{ bartype|default('bar') }} label2-{{ label }}" style="width: {{ width }}%;"></div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+            &nbsp;{{ entity.progression }} / {{ nbdoctypes }} [{{ '%3.1f'|format(entity.progression/nbdoctypes*100) }}%]
+          </dd>
+
+          <dt>Budget</dt>
+          <dd>
+            <strong>{{ entity.budget + (entity.gantt ? entity.gantt.budget : 0) }} €</strong>
+            (= {{ entity.budget }} + {{ entity.gantt ? entity.gantt.budget : 0 }})
+          </dd>
+
+          <dt>Intervenants/JEH</dt>
+          <dd>{{ entity.team|length }} ({{entity.jeh}} JEH)</dd>
+
+          <dt>Dates</dt>
+          <dd>
+            du {{ entity.dateStart|date('Y-m-d H:i:s') }}<br />
+            au {{ entity.dateCreated|date('Y-m-d H:i:s') }}
+          </dd>
+
+          <dt>Client</dt>
+          <dd><a href="{{ path('contact_show', {id: entity.contact.id}) }}">{{ entity.contact }}</a></dd>
+        </dl>
+      </div>
+    </div>
+  </article>
+
+
+  <div class="contianer-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+
+        <p style="text-align: center">
+        {% if entity.gantt %}
+          <a href="{{ path('gantt_show', {id: entity.gantt.id}) }}" class="btn btn-info">
+            Voir le diagramme de Gantt
+          </a>
+        {% else %}
+          Pour ajouter un diagramme de Gantt, créez le puis éditez le projet.
+        {% endif %}
+       </p>
+
+        {% render "JordoProjectBundle:Team:widget" with {'project': entity.id, '_format': 'html'} %}
+
+        <article class="wbox">
+          <header><h1>Timeline</h1></header>
+          <ul>
+            {% for state in entity.states %}
+            <li class="small">{{ ('state.' ~ state)|trans }} <span class="muted small">par {{ state.user }} le {{ state.dateCreated|date('Y-m-d H:i') }}</span></li>
+            {% endfor %}
+          </ul>
+        </article>
+
+        <!--<article class="wbox">
+          <header>
+            <h1>Logs</h1>
+          </header>
+          <ul>
+            <li></li>
+          </ul>
+        </article>-->
+      </div>
+
+      <div class="span9">
+
+        {% if entity.gantt and not(entity.jeh == entity.gantt.numberJEH) %}
+        <div class="alert alert-error">
+          Le nombre de JEH entre les intervenants ({{ entity.jeh }}) et le diagramme de Gantt ({{ entity.gantt.numberJEH }}) ne correspond pas !
+        </div>
+        {% endif %}
+
+
+        <div class="tabbable"> <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs nav-pills" style="border: none">
+            <li class="active"><a href="#tab1" data-toggle="tab">Présentation</a></li>
+            <li><a href="#tab2" data-toggle="tab">Documents</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab1">
+              <div class="well">
+                <h4>Description</h4>
+                {% if entity.description %}
+                <p>{{ entity.description }}</p>
+                {% else %}
+                <div class="alert alert-error">
+                  Merci de remplir <em>Description de l’étude</em>
+                </div>
+                {% endif %}
+                <br />
+
+                <h4>Contexte et objectifs de l’étude</h4>
+                {% if entity.contexte %}
+                <p>{{ entity.contexte }}</p>
+                {% else %}
+                <div class="alert alert-error">
+                  Merci de remplir <em>Contexte et objectifs de l’étude</em>
+                </div>
+                {% endif %}
+                <br />
+
+                <h4>Cahier des charges</h4>
+                <h5>Description de la demande du client</h5>
+                {% if entity.demande %}
+                <p>{{ entity.demande }}</p>
+                {% else %}
+                <div class="alert alert-error">
+                  Merci de remplir <em>Description de la demande du client</em>
+                </div>
+                {% endif %}
+                <br />
+
+                <!--<h3>Planning de réalisation de l’étude</h3>
+                <p>
+                  Le site sera livré  semaines après la signature de la convention client et sera réalisé selon le planning suivant :
+                </p>-->
+
+                <h4>Budget de l'étude</h4>
+                {% if entity.gantt %}
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Phase</th>
+                      <th>JEH</th>
+                      <th>Prix</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for phase in entity.gantt.phases %}
+                    <tr>
+                      <td>Phase {{ phase.iorder }} - {{ phase.title }}</td>
+                      <td style="text-align: center">{{ phase.numberJeh }}</td>
+                      <td style="text-align: right">{{ '%.2f'|format(phase.price) }} €</td>
+                      <td style="text-align: right">{{ '%.2f'|format(phase.price * phase.numberJeh) }} €</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                      <th style="text-align: right" colspan="3">sous-total HT</th>
+                      <th style="text-align: right">{{ '%.2f'|format(entity.gantt.budget) }} €</th>
+                    </tr>
+                    <tr>
+                      <td style="text-align: right" colspan="3">Frais</td>
+                      <td style="text-align: right">{{ '%.2f'|format(entity.budget) }} €</td>
+                    </tr>
+                    <tr>
+                      <th style="text-align: right" colspan="3">Total HT</th>
+                      <th style="text-align: right">{{ '%.2f'|format(entity.gantt.budget + entity.budget) }} €</th>
+                    </tr>
+                    <tr>
+                      <th style="text-align: right" colspan="3">T.V.A. (19.6%)</th>
+                      <th style="text-align: right">{{ '%.2f'|format((entity.gantt.budget + entity.budget)*0.196) }} €</th>
+                    </tr>
+                    <tr class="warning text-warning" style="font-weight: bold">
+                      <td style="text-align: right" colspan="3">Total TTC</td>
+                      <td style="text-align: right">{{ '%.2f'|format((entity.gantt.budget + entity.budget)*1.196) }} €</td>
+                    </tr>
+                  </tbody>
+                </table>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="tab-pane" id="tab2">
+              {% render "JordoProjectBundle:Document:widget" with {'project': entity.id, '_format': 'html'} %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+
+  </style>
+{% endblock %}

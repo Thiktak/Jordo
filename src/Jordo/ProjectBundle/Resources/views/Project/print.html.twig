@@ -1,0 +1,132 @@
+{% extends "JordoPrintBundle::layout-internal.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Projets</h1>
+      <h2>{{ entity }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('project') }}"><i class="icon-list"></i></a></li>
+        <li><a href="{{ path('project_new') }}"><i class="icon-plus"></i></a></li>
+        <li><a href="{{ path('project_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="ubox contianer-fluid">
+    <div class="row-fluid">
+      <div class="span8">
+        <p>{{ entity.description }}</p>
+
+        {% if entity.gantt %}
+        {% render "JordoGanttBundle:Gantt:widget" with {id: entity.gantt.id} %}
+        {% endif %}
+
+      </div>
+      <div class="span4" style="font-size: .75em">
+        <dl class="dl-horizontal">
+          <dt>Etat</dt>
+          <dd>{{ entity.state }}</dd>
+
+          <dt>Avancement</dt>
+          <dd>
+            <div class="progress" style="margin: 0 .5em; height: 1em; width: 60%">
+              {% set width = '%2.2f'|format(1/(nbdoctypes)*100) %}
+              {% for type in types %}
+                {% for item in type.children %}
+                  {% if item|length > 0 %}
+                    {% if item.state == 'ok' %}
+                      {% set bartype = 'bar bar-success' %}
+                    {% elseif item.state == 'warning' %}
+                      {% set bartype = 'bar bar-warning' %}
+                    {% elseif item.state == 'error' %}
+                      {% set bartype = 'bar bar-success' %}
+                    {% else %}
+                      {% set bartype = 'bar' %}
+                    {% endif %}
+                  {% endif %}
+              <div class="{{ bartype|default('') }}" style="width: {{ width }}%;"></div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+            &nbsp;{{ entity.progression }} / {{ nbdoctypes }} [{{ '%3.1f'|format(entity.progression/nbdoctypes*100) }}%]
+          </dd>
+
+          <dt>Budget</dt>
+          <dd>
+            <strong>{{ entity.budget + (entity.gantt ? entity.gantt.budget : 0) }} €</strong>
+            (= {{ entity.budget }} + {{ entity.gantt ? entity.gantt.budget : 0 }})
+          </dd>
+
+          <dt>Intervenants/JEH</dt>
+          <dd>{{ entity.team|length }} ({{entity.jeh}} JEH)</dd>
+
+          <dt>Dates</dt>
+          <dd>
+            du {{ entity.dateStart|date('Y-m-d H:i:s') }}<br />
+            au {{ entity.dateCreated|date('Y-m-d H:i:s') }}
+          </dd>
+
+          <dt>Client</dt>
+          <dd><a href="{{ path('contact_show', {id: entity.contact.id}) }}">{{ entity.contact }}</a></dd>
+        </dl>
+      </div>
+    </div>
+  </article>
+
+
+  <div class="contianer-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+
+        <p style="text-align: center">
+        {% if entity.gantt %}
+          <a href="{{ path('gantt_show', {id: entity.gantt.id}) }}" class="btn btn-info">
+            Voir le diagramme de Gantt
+          </a>
+        {% else %}
+          Pour ajouter un diagramme de Gantt, créez le puis éditez le projet.
+        {% endif %}
+       </p>
+
+        {% render "JordoProjectBundle:Team:widget" with {'project': entity.id} %}
+
+        <article class="wbox">
+          <header>
+            <h1>Logs</h1>
+          </header>
+          <ul>
+            <li></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="span9">
+
+        {% if entity.gantt and not(entity.jeh == entity.gantt.numberJEH) %}
+        <div class="alert alert-error">
+          Le nombre de JEH entre les intervenants ({{ entity.jeh }}) et le diagramme de Gantt ({{ entity.gantt.numberJEH }}) ne correspond pas !
+        </div>
+        {% endif %}
+
+        {% render "JordoProjectBundle:Document:widget" with {'project': entity.id} %}
+      </div>
+    </div>
+  </div>
+
+        <form action="{{ path('project_delete', { 'id': entity.id }) }}" method="post">
+            <input type="hidden" name="_method" value="DELETE" />
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+</section>
+{% endblock %}
+
+{% block stylesheets %}
+  <style>
+
+  </style>
+{% endblock %}

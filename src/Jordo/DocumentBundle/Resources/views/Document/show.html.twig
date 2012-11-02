@@ -1,0 +1,57 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Documents</h1>
+      <h2>{{ entity }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('document') }}"><i class="icon-list"></i></a></li>
+        <li><a href="{{ path('document_new') }}"><i class="icon-plus"></i></a></li>
+        <li><a href="{{ path('document_edit', {id: entity.id}) }}"><i class="icon-edit"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+            <tr>
+                <th>Datecreated</th>
+                <td>{{ entity.dateCreated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Dateadded</th>
+                <td>{{ entity.dateAdded|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Path</th>
+                <td>{{ entity.path }}</td>
+            </tr>
+            <tr>
+                <th>Par</th>
+                <td>{{ entity.user }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ getStateOfComments('JordoDocumentBundle:Document', entity.id) }}</td>
+            </tr>
+        </tbody>
+    </table>
+  </article>
+
+  {% render "ThiktakCommentBundle:Comment:widget" with {object: 'JordoDocumentBundle:Document', id: entity.id} %}
+
+</section>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Gantt</h1>
+      <h2>Nouveau</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('gantt') }}"><i class="icon-list"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox"><h1>Phase list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Iorder</th>
+            <th>Numberdaysafter</th>
+            <th>Numberdays</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Numberjeh</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('gantt_phase_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.title }}</td>
+            <td>{{ entity.iorder }}</td>
+            <td>{{ entity.numberDaysAfter }}</td>
+            <td>{{ entity.numberDays }}</td>
+            <td>{{ entity.description }}</td>
+            <td>{{ entity.price }}</td>
+            <td>{{ entity.numberJeh }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('gantt_phase_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('gantt_phase_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('gantt_phase_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+  </article>
+</section>
+{% endblock %}

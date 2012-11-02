@@ -1,0 +1,16 @@
+    <h1>Statistiques X</h1>
+    <ul class="l1 nav-list">
+      {% for entity in axis['X'] %}
+      <li><a href="{{ path('stats', {'x' : entity.id, 'y' : null}) }}">{{ entity.text }}</a></li>
+      {% endfor %}
+    </ul>
+<!--
+</nav>
+<nav class="navlist">
+    <h1>Statistiques Y</h1>
+    <ul class="l1 nav-list">
+      {% for entity in axis['Y'] %}
+      <li><a href="{{ path('stats', {'x' : app.request.get('x'), 'y' : entity.id}) }}">{{ entity.text }}</a></li>
+      {% endfor %}
+    </ul>
+-->

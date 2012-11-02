@@ -1,0 +1,50 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Groupes</h1>
+      <h2>Liste des groupes</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('group_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th class="span2">Membres</th>
+              <th class="span2">Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+      {% for entity in entities %}
+          <tr>
+              <td><a href="{{ path('group_show', { 'id': entity.id }) }}">{{ entity.name }}</a></td>
+              <td>{{ entity.users|length}}</td>
+              <td class="actions">
+                  <ul class="list">
+                      <li>
+                          <a href="{{ path('group_show', { 'id': entity.id }) }}">show</a>
+                      </li>
+                      <li>
+                          <a href="{{ path('group_edit', { 'id': entity.id }) }}">edit</a>
+                      </li>
+                  </ul>
+              </td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

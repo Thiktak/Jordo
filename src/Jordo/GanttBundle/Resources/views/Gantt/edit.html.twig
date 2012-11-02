@@ -1,0 +1,28 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Gantt</h1>
+      <h2>Edition</h2>
+      <h3>{{ entity }}</h3>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('gantt') }}"><i class="icon-list"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <form action="{{ path('gantt_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT" />
+        {{ form_widget(edit_form) }}
+        <p>
+            <button type="submit">Edit</button>
+        </p>
+    </form>
+  </article>
+</section>
+{% endblock %}

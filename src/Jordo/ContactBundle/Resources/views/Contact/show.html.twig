@@ -1,0 +1,77 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoContactBundle:Contact:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Contacts</h1>
+      <h2>{{ entity }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('contact') }}"><i class="icon-list"></i></a></li>
+        <li><a href="{{ path('contact_new') }}"><i class="icon-plus"></i></a></li>
+        <li><a href="{{ path('contact_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="ubox small">
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span4">
+          <dl class="dl-horizontal">
+            <dt>Nom Prénom</dt>
+            <dd>{{ entity }}&nbsp;</dd>
+            
+            <dt>Société</dt>
+            <dd>{{ entity.firm }}&nbsp;[{{ entity.type }}]</dd>
+          </dl>
+            
+          <dl class="dl-horizontal" style="opacity: .5">
+            <dt>Fiche créée le</dt>
+            <dd>{{ entity.dateCreated|date('Y-m-d H:i:s') }}&nbsp;</dd>
+            
+            <dt>Fiche modifée le</dt>
+            <dd>{{ entity.dateUpdated|date('Y-m-d H:i:s') }}&nbsp;</dd>
+          </dl>
+        </div>
+        
+        <div class="span4">
+          <dl class="dl-horizontal">
+            <dt>Adresse</dt>
+            <dd>{{ entity.addr|nl2br }}&nbsp;</dd>
+
+            {% for item in entity.infos %}
+            <dt>{{ item.type }}</dt>
+            <dd>
+              <a href="{{ path('contact_info_edit', {id: item.id}) }}" style="color: inherit">{{ item.value|nl2br }}</a>
+              <a href="{{ path('call_new', {info: item.id}) }}" class="pull-right"><i class="icon-chevron-right"></i></a>
+            </dd>
+            {% endfor %}
+
+            <dt><a href="{{ path('contact_info_new', {contact: entity.id}) }}"><i class="icon-plus icon-white"></i></a></dt>
+            <dd></dd>
+
+          </dl>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+        {% render "JordoProjectBundle:Project:widget" with {'type': 'contact', 'id': entity.id} %}
+      </div>
+      <div class="span9">
+        {% render "JordoContactBundle:Call:widget" with {'type': 'contact', 'id': entity.id} %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

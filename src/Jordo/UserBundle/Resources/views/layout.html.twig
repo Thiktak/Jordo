@@ -1,0 +1,17 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+        {% for key, message in app.session.getFlashes() %}
+        <div class="{{ key }}">
+            {{ message|trans({}, 'FOSUserBundle') }}
+        </div>
+        {% endfor %}
+
+        {% if error is defined and error %}
+            <div class="alert alert-error span8 offset4">{{ error|trans({}, 'FOSUserBundle') }}</div>
+        {% endif %}
+
+        {% block fos_user_content %}{% endblock fos_user_content %}
+</section>
+{% endblock %}

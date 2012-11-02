@@ -1,0 +1,36 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Recherche &quot;<em>{{ search }}</em>&quot; ({{ resultsAll|length }})</h1>
+    </hgroup>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <article class="wbox span2">
+        <ul>
+          {% for result in results %}
+            <li>
+              <i class="{{ result.icon }}"></i>
+              {{ result.name|trans }} ({{ result.datas|length }})
+            </li>
+          {% endfor %}
+        </ul>
+      </article>
+
+      <section class="span10">
+        <ul>
+          {% for result in resultsAll %}
+            <li class="{{ result.class }}">
+              {{ result.render|raw }}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>
+{% endblock %}

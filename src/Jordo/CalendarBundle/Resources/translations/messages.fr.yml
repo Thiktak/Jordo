@@ -1,0 +1,10 @@
+jordo:
+  calendarbundle:
+    eventtype:
+      dateStart: "Date de début"
+      dateEnd: "Date de fin"
+      title: "Titre"
+      description: "Description"
+      isTodo: "ToDo ?"
+      isOpen: "Evénement ouvert aux inscriptions"
+      isOpen_info: "Les membres peuvent s'inscrire à l'événement"

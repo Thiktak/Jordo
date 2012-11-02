@@ -1,0 +1,31 @@
+<article class="wbox">
+  <header>
+    <h1>Liste des projets ({{ entities|length }})</h1>
+  </header>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Titre du projet</th>
+        <th>Etat</th>
+        <th>JEH/Intervenants</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+      <tr>
+        <td><a href="{{ path('project_show', {id: entity.id}) }}">{{ entity.title }}</a></td>
+        <td>{{ entity.state }}</td>
+        <td>
+          {% if type == 'user' %}
+            {% for user in entity.team %}
+              {% if user.id == value %}{{ user.jeh }} JEH{% endif %}
+            {% endfor %}
+          {% else %}
+            {{ entity.team|length }} intervenant(s)
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</article>

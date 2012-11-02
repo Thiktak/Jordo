@@ -1,0 +1,69 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoCalendarBundle:Index:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Calendrier</h1>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('calendar_event_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox" style="position: relative;">
+    <div id="calendar" style="height: 400px"></div>
+    <div id="loading" style="z-index: 9999; background-color: rgba(0, 0, 0, .75); position: absolute; top: 0; bottom: 0; right: 0; left: 0;"><div style="padding-top: 15%; text-align: center; color: white;">Chargement</div></div>
+  </article>
+</section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/jordocalendar/css/fullcalendar.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/jordocalendar/css/fullcalendar.print.css') }}" media="print" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('bundles/jordocalendar/js/fullcalendar.min.js') }}"></script>
+<script>
+
+    $(document).ready(function() {
+        
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: true,
+            loading: function(bool) {
+                if (bool)
+                    $('#loading').show();
+                else
+                    $('#loading').hide();
+            },
+            events: '{{ path('calendar_sources') }}',
+        });
+
+        article = $('#calendar').parent('article');
+        section = article.parent('section');
+        
+        article.css('height', section.height() - section.find('header').height() * 2.5 );
+        $('#calendar').fullCalendar('option', 'height', $('#calendar').parent().height() * .95);
+        
+    });
+
+</script>
+{% endblock %}

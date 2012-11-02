@@ -1,0 +1,12 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block title %}An Error Occurred: {{ status_text }}{% endblock %}
+
+{% block body %}
+    
+  <div style="margin: 10%; text-align: center;">
+    <img src="{{ asset('bundles/thiktakcore/img/403.jpg') }}" alt="403 error" style="width: 100%; max-height: 400px;" />
+    <h2>The server returned a "{{ status_code }} {{ status_text }}".</h2>
+  </div>
+
+{% endblock %}

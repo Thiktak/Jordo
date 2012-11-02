@@ -1,0 +1,34 @@
+filter:
+  contact:
+    all: "Tous les contacts"
+    never: "Jamais contacté"
+    again: "A recontacter"
+
+  who:
+    all: "Tout le monde"
+    me: "Personnel"
+
+jordo:
+  contactbundle:
+    calltype:
+      contact: "Contact"
+      dateStart: "Date de début"
+      dateEnd: "Date de fin"
+      title: "Titre"
+      description: "Description"
+      isTodo: "ToDo ?"
+      isOpen: "Evénement ouvert aux inscriptions"
+      info: "Information (tel, email, ...)"
+      dateCallback: "Date de rappel"
+      dateCallback_info: "Par défaut : 3 mois"
+      state: "Etat de l'appel"
+    contacttype:
+      fname: "Prénom"
+      lname: "Lcorix"
+      type: "Type de contact"
+      firm: "Nom de la société"
+      addr: "Adresse"
+    infotype:
+      type: "Type"
+      value: "Numéro/Adresse/Info"
+      contact: "Contact associé"

@@ -1,0 +1,7 @@
+jordo:
+  documentbundle:
+    documenttype:
+      path: "Chemin vers le fichier"
+      path_info: "Collez le chemin complet avec le nom du fichier (mail SVN) sans <u>https://svn.iariss.fr/IARISS/</u>"
+      title: "Nom/Titre du fichier"
+      dateAdded: "Date de création du fichier"

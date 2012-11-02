@@ -1,0 +1,56 @@
+<article class="wbox">
+  <header>
+    <h1>Liste des appels et mises en contact ({{ entities|length }})</h1>
+    <aside>
+      <ul>
+        <li><a href="{{ path('call_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Qui</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Infoused</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+      <tr>
+        <td>
+          {% if entity.state == 'dead' %}<i class="icon-remove"></i>{% else %}{{ entity.state }}{% endif %}
+        </td>
+        <td>
+          {{ entity.specialType }}
+        </td>
+        <td>
+          {% if entity.dateStart %}<p>{{ entity.dateStart|date('Y-m-d H:i:s') }}</p>{% endif %}
+          {% if entity.dateEnd %}<p>{{ entity.dateEnd|date('Y-m-d H:i:s') }}</p>{% endif %}
+
+          {% if entity.dateStart and entity.dateEnd %}<p>{#{ ((entity.dateEnd|format('U')) - (entity.dateStart|format('U')))|date('d\j H\h i\m s\s') }#}</p>{% endif %}
+        </td>
+        <td><a href="{{ path('user_show', {id: entity.addedBy.id}) }}">{{ entity.addedBy }}</a></td>
+        <td>{{ entity.title }}</td>
+        <td>{{ entity.description }}</td>
+        <td>{{ entity.info }}</td>
+        <td class="actions">
+          <ul class="list">
+            <li>
+              <a href="{{ path('call_show', { 'id': entity.id }) }}">show</a>
+            </li>
+            <li>
+              <a href="{{ path('call_edit', { 'id': entity.id }) }}">edit</a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </article>

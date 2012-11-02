@@ -1,0 +1,143 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoStatsBundle:Index:menu" with app.request.query.all() %}
+{% endblock %}
+
+{% block body %}
+
+<section>
+  <header>
+    <hgroup>
+      <h1>Statistiques</h1>
+    </hgroup>
+  </header>
+
+  <article class="ubox" style="padding: 2em; background-color: white">
+    <div id="chart" style="height: 400px"></div>
+  </article>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <article class="wbox span4">
+        <header>
+          <h1>Personnalisation</h1>
+        </header>
+
+        <ul class="l1">
+          {% for key, filter in filters %}
+          <li class="dropdown">
+            <a class="dropdown-toggle block" data-toggle="dropdown" href="#">
+              {{ key ~ '.' ~ filter.getSelected() }}
+              <span class="caret pull-right"></span>
+            </a>
+            <ul class="dropdown-menu pull-right">
+              {% for item, selected in filter %}
+              <li class="{{ selected ? 'active' : null }}"><a href="{{ path('stats_filter', {type: key, filter: item}) }}">{{ item }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </article>
+
+      <article class="wbox span8">
+        <header>
+          <h1>Données</h1>
+        </header>
+        <pre>{{ dump|raw }}</pre>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/jordostats/css/jquery.jqplot.min.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('bundles/jordostats/js/jqplot/jquery.jqplot.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/jquery.jqplot.min.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/plugins/jqplot.barRenderer.min.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/plugins/jqplot.pieRenderer.min.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/plugins/jqplot.DonutRenderer.min.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js') }}"></script>
+  <script src="{{ asset('bundles/jordostats/js/jqplot/plugins/jqplot.pointLabels.min.js') }}"></script>
+  <script>
+    
+    $(document).ready(function(){
+        {% for item in datas %}
+        var s{{ loop.index }} = [{% for key, value in item %}['{{ key }}', {{ value }}]{% if not(loop.last) %}, {% endif %}{% endfor %}];
+        {% endfor %}
+        var ticks = ['a', 'b', 'c', 'deee'];
+ 
+        plot = $.jqplot('chart', [{% for item in datas %}s{{ loop.index }}{% if not(loop.last) %}, {% endif %}{% endfor %}], {
+            title:'Default Date Axis',
+            stackSeries: {{ options['stack'] ? 'true' : 'false' }},
+            //        stackSeries: {{ options['stack'] ? 'true' : 'false' }},
+            axes: {
+                xaxis: {
+                    //autoscale: true,
+                    {% if options['xaxis'] == 'date' %}
+                    renderer: $.jqplot.DateAxisRenderer,
+                    {% else %}
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    {% endif %}
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    //ticks: months,
+                    rendererOptions: {
+                        tickInset: 1
+                    }
+                },
+                yaxis: {
+                    max: {{ '%.2f'|format(max*1.05) }},
+                    min: {{ '%.2f'|format(min*0.95) }},
+                    autoscale: true
+                }
+            },
+            legend: {
+              show: true
+            },
+            seriesDefaults:{
+
+                {% if options['type'] == 'bar' %}
+                renderer: $.jqplot.BarRenderer,
+                {% elseif options['type'] == 'donut' %}
+                renderer: $.jqplot.DonutRenderer,
+                rendererOptions:{
+                    sliceMargin: 3,
+                    startAngle: -90,
+                    showDataLabels: true
+                },
+                {% elseif options['type'] == 'line' %}
+                renderer: $.jqplot.LineRenderer,
+                {% endif %}
+
+                //pointLabels: { show: false, stackedValue: {{ options['stack'] ? 'true' : 'false' }} },
+                tickOptions: {
+                    mark: 'cross',    // Where to put the tick mark on the axis
+                                        // 'outside', 'inside' or 'cross',
+                    showMark: true,
+                    showGridline: true, // wether to draw a gridline (across the whole grid) at this tick,
+                    show: true,         // wether to show the tick (mark and label),
+                    showLabel: true,    // wether to show the text label at the tick,
+                },
+                showTicks: true,        // wether or not to show the tick labels,
+                showTickMarks: true    // wether or not to show the tick marks                
+            },
+            series: [
+            {% for title, item in datas %}
+                {
+                    label: '{{ title }}'
+                }{% if not(loop.last) %}, {% endif %}
+            {% endfor %}
+            ],
+        });
+    });
+  </script>
+{% endblock %}

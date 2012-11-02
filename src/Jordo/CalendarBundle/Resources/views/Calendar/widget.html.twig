@@ -1,0 +1,26 @@
+<article class="wbox">
+  <header><h1>Evenements</h1></header>
+  <ul>
+    {% for entity in entities %}
+          {% set rep = entity.isIntoGuests(app.user) %}
+    <li class="{{ rep and rep.response == 1 ? 'alert alert-error' : (entity.isOpen  ? 'alert alert-info' : null) }}">
+      <a href="{{ path('calendar_event_show', {id: entity.id}) }}" title="Ajouté par {{ entity.addedBy }}. {{ entity.guests|length}} participe(nt)" class="block">
+        <span class="muted">{{ entity.dateStart|date('Y-m-d') }}</span> {{ entity }}
+        <span class="pull-right muted small" style="opacity: .5; margin-left: 5px;"><i class="icon-user"></i> {{ entity.guests|length}}</span>
+        {% if entity.isOpen %}<span class="label label-success pull-right">Inscr. ouverte</span>{% endif %}<br />
+        <span class="muted small" style="margin-left: 1em">{{ entity.description }}</span>
+
+          {% if entity.isOpen %}
+        <div class="pull-right">
+          {% if not(rep) %}
+          <a href="{{ path('calendar_event_subscribe_new', {event: entity.id, response: 1}) }}" class="btn-small btn">Oui</a>
+          <a href="{{ path('calendar_event_subscribe_new', {event: entity.id, response: 3}) }}" class="btn-small btn">Peut-être</a>
+          <a href="{{ path('calendar_event_subscribe_new', {event: entity.id, response: 2}) }}" class="btn-small btn">Non</a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</article>

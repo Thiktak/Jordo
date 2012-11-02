@@ -1,0 +1,63 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoUserBundle:User:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Users</h1>
+      <h2>Papiers</h2>
+    </hgroup>
+    <aside>
+      <ul>
+          <li>
+              <a href="{{ path('user_subscription_new') }}"><i class="icon-plus"></i></a>
+          </li>
+      </ul>
+    </aside>
+  </header>
+
+  <ul class="list">
+    {% for year in years %}
+    <li><a href="{{ path('user_subscription_year', {year: year}) }}" class="label">{{ year }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <article class="wbox">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>/</th>
+          {% for item in doctypes %}
+          <th style="vertical-align: middle; text-align: center;">{{ item }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for entity in users %}
+        <tr>
+          <th>
+            <a href="{{ path('user_show', {id: entity.id}) }}">{{ entity }}</a>
+          </th>
+          {% for item in doctypes %}
+          {% set n = entity.hasSubscription(item.id, year) %}
+          <td style="width: {{ 100*1/((doctypes|length)+1.5) }}%; text-align: center; background-color: {{ arrayIndex(n, {'ok' : 'lightgreen', 'error': 'darkred'}, '#f89406') }}">
+            {% if year >= current %}
+              {% if n %}<a href="{{ path('user_subscription_show', {id: n.id}) }}">{{ n }}</a>
+              {% else %}<a href="{{ path('user_subscription_new', {user: entity.id, year: year, type: item.id}) }}"><i class="icon-plus"></i></a>
+              {% endif %}
+            {% else %}
+             {{ n }}
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

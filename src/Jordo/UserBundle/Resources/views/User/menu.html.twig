@@ -1,0 +1,27 @@
+    <ul class="l1">
+      <li><a href="{{ path('user_subscription') }}"><i class="icon-folder-open"></i> Documents</a></li>
+    </ul>
+
+    <h1>Filtres</h1>
+    <ul class="l1">
+      {% for key, filter in filters %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          {{ key ~ '.' ~ filter.getSelected() }}
+          <span class="caret pull-right"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          {% for item, selected in filter %}
+          <li class="{{ selected ? 'active' : null }}"><a href="{{ path('user_filter', {type: key, filter: item}) }}">{{ item }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h1><a href="{{ path('user') }}">Tous les membres</a></h1>
+    <ul class="l1 nav-list">
+      {% for entity in entities %}
+      <li><a href="{{ path('user_show', {id: entity.id}) }}">{{ entity }}</a></li>
+      {% endfor %}
+    </ul>

@@ -1,0 +1,47 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoUserBundle:User:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Users</h1>
+      <h2>{{ entity }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li>
+          <a href="{{ path('user') }}"><i class="icon-list"></i></a>
+        </li>
+        <li>
+          <a href="{{ path('user_new') }}"><i class="icon-plus"></i></a>
+        </li>
+        <li>
+          <a href="{{ path('user_edit', {id: entity.id}) }}"><i class="icon-user"></i> Fiche</a>
+        </li>
+        <li>
+          <a href="{{ path('user_edit_roles', {id: entity.id}) }}"><i class="icon-screenshot"></i> Roles &amp; groupes</a>
+        </li>
+        {% if app.user == entity %}
+        <li>
+          <a href="{{ path('fos_user_change_password', {id: entity.id}) }}"><i class="icon-screenshot"></i> Modifier mon mot de passe</a>
+        </li>
+        {% endif %}
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <form action="{{ path('user_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT" />
+        {{ form_widget(edit_form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </div>
+    </form>
+  </article>
+</section>
+{% endblock %}

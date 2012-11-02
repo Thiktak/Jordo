@@ -1,0 +1,50 @@
+    <form action="{{ path('group_role_update', { 'type' : type, 'id': id }) }}" method="post">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            {% if type == 'user' %}
+            <th>Groupes</th>
+            {% endif %}
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for role, value in entities %}
+          {% set hasRole = false %}
+          <tr {{ value ? ' class="alert-success"' : null }}>
+            <td>
+              <strong>{{ (role ~ '_label')|trans }}</strong>
+              <span class="block muted small" style="margin-left: 1em">{{ role ~ '_descr' }}</span>
+            </td>
+            {% if type == 'user' %}
+            <td>
+              {% for group in entity.groups %}
+                {% if group.hasRole(role) %}
+                  {% set hasRole = true %}
+              <span class="label">{{ group }}</span>
+                {% endif %}
+              {% endfor %}
+            </td>
+            {% endif %}
+            <td style="text-align: center">
+              {% if hasRole %}
+              <i class="icon-ok"></i>
+              {% else %}
+                {% if is_granted("ROLE_ADMIN") %}
+              <input type="checkbox" name="role[{{ role }}]" value="1" {{ value ? ' checked="checked"' : null }} />
+                {% else %}
+              <i class="icon-remove"></i>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if is_granted("ROLE_ADMIN") %}
+      <div class="form-actions">
+        <input type="submit" class="pull-right btn btn-primary" />
+      </div>
+      {% endif %}
+    </form>

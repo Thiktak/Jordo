@@ -1,0 +1,53 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoCalendarBundle:Index:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1><a href="{{ path('calendar') }}">Calendrier</a></h1>
+      <h2>Todo List</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('calendar_event_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Deadline</th>
+          <th>Etat</th>
+          <th>Commentaire</th>
+          <th>Concernés</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entity in entities %}
+        <tr>
+          <td>{{ entity }}</td>
+          <td>
+            {{ entity.dateEnd|date('Y-m-d H:i:s') }}
+            <progress min="{{ entity.dateStart|date('U') }}" max="{{ entity.dateEnd|date('U') }}" value="{{ 'now'|date('U') }}"></progress>
+          </td>
+          <td>{{ entity.dateEnd > 'now' ? 'en retard' : null }}</td>
+          <td>{{ entity.description }}</td>
+          <td>
+            {% for user in entity.guests %}
+              &nbsp;<a href="{{ path('user_show', {id: user.id}) }}">{{ user }}</a>&nbsp;
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

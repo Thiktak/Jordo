@@ -1,0 +1,68 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoContactBundle:Contact:menu" %}
+
+  {% if old is defined and old %}
+</nav>
+<nav class="navlist">
+  <h1>Historique des appels</h1>
+  <ul>
+    <li><a href="{{ path('call_new', {contact: app.request.query.get('contact')}) }}" class="active"><i class="icon-plus"></i> Ajouter un nouvel appel</a></li>
+    {% for call in old %}
+    <li><a href="{{ path('call_show', {id: call.id}) }}">{{ call }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Contacts</h1>
+      <h2>Nouveau</h2>
+      {% if contact %}
+      <h3>{{ contact }}</h3>
+      {% endif %}
+    </hgroup>
+    <aside>
+      <ul>
+        <li>
+          <a href="{{ path('contact') }}"><i class="icon-list"></i></a>
+        </li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    {% if contact %}
+    <form action="{{ path('call_create', {contact: contact.id}) }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">&lt; Retour</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+    {% else %}
+    <form action="" method="get" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Suivant &gt;</button>
+        </div>
+    </form>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/thiktakcore/js/jquery-ui-autocomplete.js') }}"></script>
+    <script src="{{ asset('bundles/thiktakcore/js/jquery.select-to-autocomplete.min.js') }}"></script>
+    <script>
+      $(document).ready(function() {
+        $('select[data-autocomplete]').selectToAutocomplete();
+      });
+    </script>
+{% endblock %}

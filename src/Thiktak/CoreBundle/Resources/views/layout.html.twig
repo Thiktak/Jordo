@@ -1,0 +1,159 @@
+{% extends "::base.html.twig" %}
+
+{% set left_menu = block('menu') %}
+
+{% block all_body %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{{ path('_welcome') }}">
+            <img src="{{ asset('bundles/thiktakcore/img/logo_iariss.png') }}" alt="ERP - IARISS" style="margin-top: -8px; margin-bottom: -8px; height: 35px" />
+          </a>
+          <div class="nav-collapse collapse">
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <ul class="nav pull-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="{{ path('fos_user_profile_show') }}"><i class="icon-user"></i> Mon profil</a></li>
+                  <li class="divider">
+                  </li>
+                  <li>
+                    <a href="{{ path('fos_user_security_logout') }}" class="navbar-link">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            {% else %}
+            <p class="navbar-text pull-right">
+                <a href="{{ path('fos_user_security_login') }}" class="navbar-link">
+                  {{ 'layout.login'|trans({}, 'FOSUserBundle') }}
+                </a>
+            </p>
+            {% endif %}
+            <form class="navbar-search pull-right" action="{{ path('search') }}">
+              <input name="search" class="search-query span2" placeholder="Recherche" type="search" style="margin-top: 2px; padding: 2px 10px;" />
+            </form>
+            <ul class="nav">
+              
+              <li class="divider-vertical"></li>
+
+              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Secrétariat
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('user') }}"><i class="icon-user"></i> Membres</a></li>
+                  <li><a href="{{ path('user_subscription') }}"><i class="icon-folder-open"></i> Documents</a></li>
+                  <li><a href="{{ path('calendar') }}"><i class="icon-tasks"></i> Agenda</a></li>
+                </ul>
+              </li>
+              
+              <li class="divider-vertical"></li>
+
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Commercial
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('contact') }}"><i class="icon-user"></i> Contacts</a></li>
+                  <li><a href="{{ path('call') }}"><i class="icon-hand-right"></i> Appels</a></li>
+                </ul>
+              </li>
+
+              <li class="divider-vertical"></li>
+
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Qualité
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('document') }}"><i class="icon-eye-open"></i> Documents</a></li>
+                </ul>
+              </li>
+
+              <li class="divider-vertical"></li>
+
+              
+              <li><a href="{{ path('project') }}"><i class="icon-book"></i> Projets</a></li>
+
+              <li class="divider-vertical"></li>
+
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Outils
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('calendar_todo') }}"><i class="icon-road"></i> ToDo</a></li>
+                  <li><a href="{{ path('gantt') }}">Diagrammes de Gantt</a></li>
+                  <li><a href="{{ path('stats') }}">Statistiques</a></li>
+                </ul>
+              </li>
+
+              {% if is_granted("ROLE_ADMIN") %}
+
+              <li class="divider-vertical"></li>
+
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  Administration
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ path('group') }}"><i class="icon-globe"></i> Les groupes</a></li>
+                </ul>
+              </li>
+              {% endif %}
+              {% endif %}
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div id="container"> <!-- class="container-fluid" -->
+
+      <nav id="nav">
+        <!--<ul>
+          <li>
+            <a href="{{ path('_welcome') }}">Home</a>
+          </li>
+          <li>
+            <a href="{{ path('user') }}">Members</a>
+          </li>
+          <li>
+            <a href="#">Calendar</a>
+          </li>
+          <li>
+            <a href="{{ path('project') }}">Projects</a>
+          </li>
+          <li>
+            <a href="#">Documents</a>
+          </li>
+        </ul>-->
+      </nav>
+
+      {% if not(left_menu is empty) %}
+      <nav class="navlist">
+        {{ left_menu|raw }}
+      </nav>
+      {% endif %}
+
+      {{ block('body') }}
+    </div>
+{% endblock %}

@@ -1,0 +1,82 @@
+<?php
+
+namespace Thiktak\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Thiktak\CoreBundle\Entity\Notify
+ *
+ * @ORM\Table(name="notify")
+ * @ORM\Entity
+ */
+class Notify
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    // @TODO Thiktak\UserBundle\Entoty\User
+    /**
+     * @ORM\ManyToOne(targetEntity="\Jordo\UserBundle\Entity\User", inversedBy="user")
+     */
+    protected $user;
+
+    /**
+     * @var \DateTime $dateCreated
+     *
+     * @ORM\Column(name="date_created", type="datetime")
+     */
+    protected $dateCreated;
+
+    /**
+     * @var string $content
+     *
+     * @ORM\Column(name="object", type="string", length=255)
+     */
+    protected $object;
+
+    /**
+     * @var string $param1
+     *
+     * @ORM\Column(name="param1", type="string", length=255, nullable=true)
+     */
+    protected $param1;
+
+    /**
+     * @var string $param2
+     *
+     * @ORM\Column(name="param2", type="string", length=255, nullable=true)
+     */
+    protected $param2;
+
+    /**
+     * @var string $param3
+     *
+     * @ORM\Column(name="param3", type="string", length=255, nullable=true)
+     */
+    protected $param3;
+
+    /**
+     * @var string $param4
+     *
+     * @ORM\Column(name="param4", type="string", length=255, nullable=true)
+     */
+    protected $param4;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

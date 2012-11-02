@@ -1,0 +1,106 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoUserBundle:User:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Users</h1>
+      <h2>{{ entity }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('user') }}"><i class="icon-list"></i></a></li>
+        <li><a href="{{ path('user_new') }}"><i class="icon-plus"></i></a></li>
+        <li><a href="{{ path('user_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="ubox" style="font-size: .75em">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4" style="text-align: center;">
+                <figure>
+                  <img src="{{ asset('bundles/jordouser/images/avatar-empty.png') }}" alt="AVATAR" />
+                </figure>
+                <br />
+                {% for group in entity.groups %}
+                <span class="label label-success">{{ group }}</span>
+                <br />
+                {% endfor %}
+                <span class="label label-info">
+                  {{ entity.filiere }} - {{ entity.promo }}
+                </span>
+            </div>
+            <div class="span4">
+              <dl class="dl-horizontal">
+                <dt>Nom prénom</dt>
+                <dd>{{ entity.fname }}&nbsp;{{ entity.lname }}</dd>
+
+                <dt>Email</dt>
+                <dd>{{ entity.email }}&nbsp;</dd>
+
+                <dt>Téléphone</dt>
+                <dd>{{ entity.phone }}&nbsp;</dd>
+
+                <dt>Né</dt>
+                <dd>à {{ entity.birthPlace }}&nbsp;</dd>
+                <dd>le {{ entity.birth|date('Y-m-d H:i:s') }}&nbsp;</dd>
+
+                <dt>Adresse personnelle</dt>
+                <dd>{{ entity.addrPerso|nl2br }}&nbsp;</dd>
+
+                <dt>Adresse des parents</dt>
+                <dd>{{ entity.addrParents|nl2br }}&nbsp;</dd>
+              </dl>
+            </div>
+            <div class="span4">
+              <dl class="dl-horizontal">
+                <dt>N° sécurité sociale</dt>
+                <dd>{{ entity.socialNumber }}&nbsp;</dd>
+
+                <dt>N° étudiant</dt>
+                <dd>{{ entity.studentNumber }}&nbsp;</dd>
+
+                {% for item in doctypes %}
+                {% set n = entity.hasSubscription(item.id, year) %}
+                <dt>{{ item.title }}</dt>
+                <dd>
+                  {% for y in entity.getYearsOfSubscription() %}
+                    {% if n %}
+                  <a href="{{ path('user_subscription_show', {id: n.id}) }}" title="{{ y }} - {{ item.title }} - {{ n }}" style="{{ y != year ? 'opacity: .5' : null }}">
+                    {% elseif y == year %}
+                  <a href="{{ path('user_subscription_new', {user: entity.id, year: year, type: item.id}) }}">
+                    {% else %}
+                  <a href="#">
+                    {% endif %}
+                    <i class="icon-{{ arrayIndex(n, {'ok': 'ok icon-white', 'error': 'warning-sign icon-white'}, 'plus-sign') }}"></i></a>
+                  {% endfor %}
+                </dd>
+                {% endfor %}
+              </dl>
+            </div>
+        </div>
+    </div>
+  </article>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      {% render "JordoProjectBundle:Project:widget" with {'type': 'user', 'id': entity.id} %}
+    </div>
+  </div>
+
+    <br />
+
+            <form action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                <input type="hidden" name="_method" value="DELETE" />
+                {{ form_widget(delete_form) }}
+                <button type="submit">Delete</button>
+            </form>
+
+</section>
+{% endblock %}

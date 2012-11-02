@@ -1,0 +1,33 @@
+state:
+  draft: "Ebauche"
+  devis: "Devis"
+  wait: "En attente"
+  progress: "En cours de réalisation"
+  cancel: "Annulé"
+  close: "Terminé"
+
+filter:
+  state:
+    all: "Tous les projets"
+    draft: "Ebauche"
+    devis: "Devis"
+    wait: "En attente"
+    progress: "En cours de réalisation"
+    cancel: "Annulé"
+    close: "Terminé"
+
+jordo:
+  projectbundle:
+    projecttype:
+      title: "Titre"
+      budget: "Budget (frais) du projet"
+      budget_info: "Le budget total du projet sera établi avec le diagramme de Gantt"
+      contact: "Contact"
+      contexte: "Contexte et objectifs de l’étude"
+      demande: "Description de la demande du client"
+      description: "Description globale"
+      description_info: "En 1 ligne"
+      dateStart: "Date de commencement"
+      dateStart_info: "A spécifier une fois le projet démarré"
+      gantt: "Diagramme de Gantt"
+      gantt_info: "A construire avec le devis"

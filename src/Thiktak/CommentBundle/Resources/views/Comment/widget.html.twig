@@ -1,0 +1,16 @@
+<section class="comments">
+  {% for entity in entities %}
+  <article>
+    <div class="rating">{{ entity.state }}</div>
+    <div class="author">
+      <a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity.user }}</a>
+      <span class="muted">{% if entity.dateCreated %}{{ entity.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</span>
+    </div>
+    <div class="content">{{ entity.content }}</div>
+  </article>
+  {% endfor %}
+  <article>
+    <a href="javascript: void(0)" onclick="$('#thiktak-comment-{{uid}}').toggle()">Répondre</a> ({{ getNumberOfComments(object, id)  }})
+    <div class="hide" id="thiktak-comment-{{uid}}">{% render "ThiktakCommentBundle:Comment:new" with {object: object, id: id} %}</div>
+  </article>
+</section>

@@ -1,0 +1,79 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoContactBundle:Contact:menu" %}
+
+  {% if old is defined %}
+</nav>
+<nav class="navlist">
+  <h1>Historique des appels</h1>
+  <ul>
+    <li><a href="{{ path('call_new', {contact: entity.id}) }}" class="active"><i class="icon-plus"></i> Ajouter un nouvel appel</a></li>
+    {% for call in old %}
+    <li><a href="{{ path('call_show', {id: call.id}) }}">{{ call }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Contacts</h1>
+      <h2>Appels - <a href="{{ path('contact_show', {id: entity.info.contact.id}) }}">{{ entity.info.contact }}</a></h2>
+      <h3>{{ entity }}</h3>
+    </hgroup>
+    <aside>
+      <ul>
+        <li>
+          <a href="{{ path('contact') }}"><i class="icon-list"></i></a>
+        </li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Datecreated</th>
+                <td>{{ entity.dateCreated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Dateupdated</th>
+                <td>{{ entity.dateUpdated|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Datestart</th>
+                <td>{{ entity.dateStart|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Dateend</th>
+                <td>{{ entity.dateEnd|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ entity.description }}</td>
+            </tr>
+            <tr>
+                <th>Istodo</th>
+                <td>{{ entity.isTodo }}</td>
+            </tr>
+            <tr>
+                <th>Infoused</th>
+                <td>{{ entity.info }}</td>
+            </tr>
+        </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

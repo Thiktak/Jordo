@@ -1,0 +1,33 @@
+ROLE_ADMIN_label: 'ADMIN'
+ROLE_ADMIN_descr: "Donne tous les pouvoirs d'accès au site"
+
+ROLE_MEMBER_label: 'MEMBRE'
+
+ROLE_USER_label: 'VISITEUR'
+ROLE_USER_descr: "Simple membre authentifié du site. Toutes les personnes connectés ont ce statut."
+
+
+jordo:
+  userbundle:
+    usertype:
+      fname: "Prénom"
+      lname: "Nom"
+      addrPerso: "Adresse personnelle"
+      addrParents: "Adresse des parents"
+      phone: "N° de téléphone"
+      birth: "Date de naissance"
+      birthPlace: "Lieu de naissance"
+      filiere: "Filiere"
+      promo: "Promo"
+      socialNumber: "Numéro de sécurité sociale"
+      studentNumber: "Numéro étudiant"
+
+    subscriptiontype:
+      user: "Membre"
+      type: "Type de document"
+      state: "Etat"
+      year: "Année de cotisation"
+      comment: "Commentaire"
+
+    grouptype:
+      name: "Nom du groupe"

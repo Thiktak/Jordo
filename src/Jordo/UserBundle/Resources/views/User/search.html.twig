@@ -1,0 +1,12 @@
+<article class="wbox">
+  <header>
+    <hgroup>
+      <h1>User: <a href="{' path('user_show', {id: entity.id}) }}">{{ entity.fname }} {{ entity.lname }}</a></h1>
+    </hgroup>
+  </header>
+  <div class="row-fluid small muted">
+    <span class="span2 center">{{ entity.phone }}</span>
+    <span class="span2 center">{{ entity.email }}</span>
+    <span class="span2 center">{{ entity.addrPerso|nl2br }}</span>
+  </div>
+</article>

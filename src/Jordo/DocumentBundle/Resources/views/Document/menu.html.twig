@@ -1,0 +1,6 @@
+    <h1>Dossiers</h1>
+    <ul class="l1">
+      {% for path, label in paths %}
+      <li><a href="{{ path('document', {path: path}) }}">{{ label }}</a></li>
+      {% endfor %}
+    </ul>

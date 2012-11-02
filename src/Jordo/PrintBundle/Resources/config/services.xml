@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    
+
+    <services>
+        <service id="jordo.print.listener" class="Jordo\PrintBundle\EventListener\PdfListener">
+            <!--<tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="1000" />-->
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" priority="1000" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+            <argument id="templating" type="service" />
+        </service>
+    </services>
+    <!--
+    <parameters>
+        <parameter key="jordo_print.example.class">Jordo\PrintBundle\Example</parameter>
+    </parameters>
+
+    <services>
+        <service id="jordo_print.example" class="%jordo_print.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+</container>

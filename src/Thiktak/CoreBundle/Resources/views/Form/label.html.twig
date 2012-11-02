@@ -1,0 +1,9 @@
+{% block field_label %}
+{% spaceless %}
+  <label for="{{ id }}">
+    {{ id|replace({'_':'.'})|trans }}
+    {% set t = transExists( (id|replace({'_':'.'})) ~ '_info' ) %}
+    {% if t %}<em class="muted small block">{{ t|raw }}</em>{% endif %}
+  </label>
+{% endspaceless %}
+{% endblock field_label %}

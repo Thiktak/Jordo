@@ -1,0 +1,44 @@
+{% extends "JordoUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+
+<div class="modal" tabindex="-1">
+  <div class="modal-header">
+	  <div class="content"><h3>Login</h3></div>
+  </div>
+	<form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin center">
+ 		 <div class="modal-body">
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+			<p>
+				<input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}" class="span4" />
+			</p>
+
+			<p>
+				<input type="password" id="password" name="_password" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" class="span4" />
+			</p>
+
+			<p>
+				<label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+				<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+			</p>
+
+		</div>
+		<div class="modal-footer">
+			<input type="submit" id="_submit" name="_submit" class="btn btn-large btn-block btn-success" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+		 </div>
+	</form>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+		<style>
+			.form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+		</style>
+{% endblock %}

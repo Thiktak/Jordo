@@ -1,0 +1,145 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Raports</h1>
+      <h2>#{{ entity.id }}</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('project_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ entity.type }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('report_ca') }}">
+                Back to the list
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('report_ca_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        <li>
+            <form action="{{ path('report_ca_delete', { 'id': entity.id }) }}" method="post">
+                <input type="hidden" name="_method" value="DELETE" />
+                {{ form_widget(delete_form) }}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    </ul>
+  </article>
+
+      {% for i, project in projects %}
+      {% set class = '' %}
+      {% if project.state == 'cancel' %}
+        {% set class = 'label-inverse' %}
+      {% elseif project.state == 'devis' %}
+        {% set class = 'label-warning' %}
+      {% elseif project.state == 'current' %}
+        {% set class = 'label-success' %}
+      {% elseif project.state == 'close' %}
+        {% set class = 'label-important' %}
+      {% elseif project.state == 'wait' %}
+        {% set class = 'label-info' %}
+      {% endif %}
+  <article class="wbox">
+    <header>Projet - {{ project }}</header>
+        <div class="tabbable tabs-left">
+          <ul class="nav nav-tabs span2" style="text-align: right; margin-left: 0; margin-bottom: 0">
+            <li><a href="#p{{i}}-1" data-toggle="tab" class="label {{class}}">
+              Projet {{ project.id }} - {{ project.title }}
+              <span style="margin-top: -1em; float: right; font-size: .75em; opacity: .5" class="block">{{ project.state }}</span>
+            </a></li>
+            <li><a href="#p{{i}}-2" data-toggle="tab">Description</a></li>
+            <li><a href="#p{{i}}-3" data-toggle="tab">Gantt</a></li>
+            <li><a href="#p{{i}}-4" data-toggle="tab">Documents</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="p{{i}}-1">
+              {% render "JordoReportBundle:ReportItem:widget" with {object: 'Jordo\\ProjectBundle\\Entity\\Project', id: project.id, '_format': 'html'} %}
+            </div>
+            <div class="tab-pane" id="p{{i}}-2">
+              ... B
+            </div>
+            <div class="tab-pane" id="p{{i}}-3">
+              <br />
+              {% if project.gantt %}
+              {% render "JordoGanttBundle:Gantt:widget" with {id: project.gantt.id, '_format': 'html'} %}
+              {% else %}
+              Aucun diagramme de Gantt associé
+              {% endif %}
+            </div>
+            <div class="tab-pane" id="p{{i}}-4">
+              <br />
+              {% render "JordoProjectBundle:Document:widget" with {project: project.id, '_format': 'html'} %}
+            </div>
+          </div>
+        </div>
+  </article>
+      {% endfor %}
+
+  <article>
+    <header>Les événements</header>
+
+  </article>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    $('a[data-report-add]').click(function() {
+      guid = $(this).attr('data-report-add');
+
+      $('#jordo-report-item-' + guid)
+      .parent()
+      .after( '<tr>' + $('#jordo-report-item-' + guid).html() + '</tr>' );
+
+    });
+
+    var f = function() {
+      var _this = this;
+      $(_this).html( $(_this).html().replace(/<br>$/gi, '') );
+      
+      $(_this).css('border', '1px solid red');
+
+      $.get($(_this).attr('data-center'), {value: $(_this).html()}, function(data) {
+
+        if( data == $(_this).html() || $(_this).get(0).tagName == 'A' )
+          $(_this).css('border-color', 'transparent');
+
+        else
+          $(_this).css('border-color', 'orange');
+
+        $(_this).html(data);
+      });
+    };
+
+    $('div[data-center]').focusout(f);
+    $('a[data-center]').click(f);
+  </script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
+
+{% block menu %}
+  {% render "JordoContactBundle:Contact:menu" %}
+{% endblock %}
+
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1>Contacts</h1>
+      <h2>Liste</h2>
+    </hgroup>
+    <aside>
+      <ul>
+        <li><a href="{{ path('contact_new') }}"><i class="icon-plus"></i></a></li>
+      </ul>
+    </aside>
+  </header>
+
+  <article class="wbox">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Société</th>
+                <th>Type</th>
+                <th>Adresse</th>
+                <th>Dernier contact</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            {% set n = false %}
+            {% for project in entity.projects %}
+              {% for team in project.team %}
+                <!-- @TODO user.id -->
+                {% if team == app.user %}{% set n = true %}{% endif %}
+              {% endfor %}
+            {% endfor %}
+            <tr{{ n ? ' class="alert-info"' : null}}>
+                <td>
+                  {%if entity.hasProjects() %}<i class="icon-star" title="{{ entity.hasProjects() }} projet(s)"></i>{% endif %}
+                  <a href="{{ path('contact_show', { 'id': entity.id }) }}">
+                    {{ entity }}
+                  </a>
+                </td>
+                <td>{{ entity.firm }}</td>
+                <td>{{ entity.type }}</td>
+                <td>{{ entity.addr }}</td>
+                <td>
+                    {% if entity.infos %}
+                    (x{{ entity.calls|length }})
+                    {% for call in entity.calls %}{{ loop.first ? call.dateStart|date('Y-m-d H:i:s') : null }}{% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

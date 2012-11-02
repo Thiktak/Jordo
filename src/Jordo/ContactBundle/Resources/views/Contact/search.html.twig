@@ -1,0 +1,11 @@
+<article class="wbox">
+  <header>
+    <hgroup>
+      <h1>Contact: <a href="{' path('contact_show', {id: entity.id}) }}">{{ entity.fname }} {{ entity.lname }}</a></h1>
+    </hgroup>
+  </header>
+  <div class="row-fluid small muted">
+    <span class="span2 center">{{ entity.firm }}</span>
+    <span class="span2 center">{{ entity.addr|nl2br }}</span>
+  </div>
+</article>
