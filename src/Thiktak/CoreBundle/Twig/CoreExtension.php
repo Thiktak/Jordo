@@ -19,6 +19,26 @@ class CoreExtension extends \Twig_Extension
         );
     }
 
+    public function getFilters()
+    {
+        return array(
+            'printDate'  => new \Twig_Filter_Method($this, 'printDate'),
+        );
+    }
+
+    public function printDate($DateTime = null, $short = true, $format = null)
+    {
+        if( !($DateTime instanceof \DateTime) )
+            $DateTime = new \DateTime($DateTime);
+        
+        $return = $DateTime->format($format ?: 'd/m/Y h\hi');
+
+        if( $short )
+            $return = preg_replace('`(:00){1,}$`', null, $return);
+
+        return $return;
+    }
+
     public function arrayIndex($index, array $array, $else = null)
     {
         if( is_object($index) )

@@ -66,7 +66,7 @@
       <div class="span2">
         <article class="wbox">
           <header>
-            <h1>Participants ({{ entity.guests|length }})</h1>
+            <h1>Participants ({{ entity.getGuestsByResponse(1)|length + entity.getGuestsByResponse(3)|length }}/{{ entity.guests|length }})</h1>
           </header>
           {% set rep = entity.isIntoGuests(app.user) %}
           <div class="center">
