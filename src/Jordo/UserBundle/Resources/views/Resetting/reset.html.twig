@@ -1,0 +1,17 @@
+{% extends "JordoUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<div class="modal" tabindex="-1">
+  <div class="modal-header">
+      <div class="content"><h3>Changer le mot de passe</h3></div>
+  </div>
+  <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset center">
+    <div class="modal-body">
+      {{ form_widget(form) }}
+    </div>
+      <div class="modal-footer">
+        <input type="submit" class="btn btn-large btn-block btn-danger" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" />
+      </div>
+  </form>
+</div>
+{% endblock %}

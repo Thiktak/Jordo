@@ -25,7 +25,8 @@
 
 		</div>
 		<div class="modal-footer">
-			<input type="submit" id="_submit" name="_submit" class="btn btn-large btn-block btn-success" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+      <a href="{{ path('fos_user_resetting_request') }}" class="btn pull-left btn-large" style="opacity: .5">Mot de passe oublié ?</a>
+			<input type="submit" class="btn btn-large btn-success" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
 		 </div>
 	</form>
 </div>
