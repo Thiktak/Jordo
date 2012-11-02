@@ -88,6 +88,8 @@ class DocumentController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new Document();
+        $entity->setUser($this->get('security.context')->getToken()->getUser());
+        
         $form = $this->createForm(new DocumentType(), $entity);
         $form->bind($request);
 
@@ -115,6 +117,7 @@ class DocumentController extends Controller
     public function newAction()
     {
         $entity = new Document();
+        $this->get('thiktak.core.form')->bind($entity);
         $form   = $this->createForm(new DocumentType(), $entity);
 
         return array(

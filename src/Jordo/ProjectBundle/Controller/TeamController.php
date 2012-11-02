@@ -110,16 +110,16 @@ class TeamController extends Controller
     /**
      * Finds and displays a Team entity.
      *
-     * @Route("project-{project}/team-{id}", name="project_team_show")
+     * @Route("project-{project}/team-{id}", name="project_team_show", defaults={"project"=0})
      * @Method("GET")
      * @Template()
      */
-    public function showAction($project, $id)
+    public function showAction($project = null, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $oProject = $em->getRepository('JordoProjectBundle:Project')->find($project);
         $entity = $em->getRepository('JordoProjectBundle:Team')->find($id);
+        $oProject = $em->getRepository('JordoProjectBundle:Project')->find($project ?: $entity->getProject()->getId());
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Team entity.');

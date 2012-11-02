@@ -15,7 +15,6 @@ class DocumentType extends AbstractType
             ->add('title')
             ->add('dateAdded')
             ->add('path')
-            ->add('user')
             ->add('doctype')
         ;
     }

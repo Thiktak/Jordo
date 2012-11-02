@@ -31,3 +31,9 @@ jordo:
       dateStart_info: "A spécifier une fois le projet démarré"
       gantt: "Diagramme de Gantt"
       gantt_info: "A construire avec le devis"
+  documenttype:
+    project: "Projet associé"
+    title: "Titre"
+    dateAdded: "Date d'ajout"
+    path: "Chemin du fichier"
+    dostype: "Type de fichier"
