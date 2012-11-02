@@ -78,6 +78,8 @@ class TeamController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->get('Thiktak.core.notify')->log($entity);
+
             return $this->redirect($this->generateUrl('project_team_show', array('project' => $project, 'id' => $entity->getId())));
         }
 

@@ -136,6 +136,8 @@ class DocumentController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->get('Thiktak.core.notify')->log($entity);
+
             return $this->redirect($this->generateUrl('document_show', array('id' => $entity->getId())));
         }
 
@@ -205,13 +207,12 @@ class DocumentController extends Controller
             throw $this->createNotFoundException('Unable to find Document entity.');
         }
 
-        $editForm = $this->createForm(new DocumentType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $this->get('Thiktak.core.notify')->log($entity);
 
+        $editForm = $this->createForm(new DocumentType(), $entity);
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'edit_form'   => $editForm->createView()
         );
     }
 

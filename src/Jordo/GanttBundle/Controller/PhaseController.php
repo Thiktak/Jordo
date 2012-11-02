@@ -56,6 +56,8 @@ class PhaseController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->get('Thiktak.core.notify')->log($entity);
+
             return $this->redirect($this->generateUrl('gantt_show', array('id' => $entity->getGantt()->getId())));
         }
         
@@ -108,6 +110,8 @@ class PhaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Phase entity.');
         }
+
+        $this->get('Thiktak.core.notify')->log($entity);
 
         $deleteForm = $this->createDeleteForm($id);
 

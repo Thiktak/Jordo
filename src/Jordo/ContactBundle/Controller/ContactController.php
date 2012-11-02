@@ -18,6 +18,30 @@ use Jordo\ContactBundle\Form\ContactType;
  */
 class ContactController extends Controller
 {
+    static public function notifyWrite($sc, $action, $entity)
+    {
+        $who = sprintf(
+            '<a href="%s">%s</a>',
+            $entity->getUser() ? $sc->get('router')->generate('user_show', array('id' => $entity->getUser()->getId())) : '#',
+            $entity->getUser() ?: 'Anonymous'
+        );
+
+        $contact = sprintf(
+            '<a href="%s">%s</a>',
+            $sc->get('router')->generate('contact_show', array('id' => $entity->getParam1()->getId())),
+            $entity->getParam1()
+        );
+           
+        // jordo.contact.event.$ACTION
+        // create = %s a ajouté un évènement (%s)
+        // update = %s a modifé une prise de contact avvec %s (par %s)
+        switch( $action )
+        {
+            case 'update' : return sprintf('%s a modifié un contact (%s)', $who, $contact); break;
+            case 'create' : return sprintf('%s a ajouté un contact (%s)', $who, $contact); break;
+        }
+    }
+
     static function applyFilters($t, $entities)
     {
         $userId = $t->get('security.context')->getToken()->getUser()->getId();

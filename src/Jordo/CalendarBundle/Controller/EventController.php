@@ -19,6 +19,32 @@ use Jordo\CalendarBundle\Form\EventType;
  */
 class EventController extends Controller
 {
+    static public function notifyWrite($sc, $action, $entity)
+    {
+        $who = sprintf(
+            '<a href="%s">%s</a>',
+            $entity->getUser() ? $sc->get('router')->generate('user_show', array('id' => $entity->getUser()->getId())) : '#',
+            $entity->getUser() ?: 'Anonymous'
+        );
+
+        $event = sprintf(
+            '<a href="%s">%s</a>',
+            $sc->get('router')->generate('calendar_event_show', array('id' => $entity->getParam1()->getId())),
+            $entity->getParam1()
+        );
+
+        $date = $entity->getParam1()->getDateStart()->format('d/m/Y H\hi');
+           
+        // jordo.contact.event.$ACTION
+        // create = %s a ajouté un évènement (%s)
+        // update = %s a modifé une prise de contact avvec %s (par %s)
+        switch( $action )
+        {
+            case 'update' : return sprintf('%s a modifié l\'événement (%s) du %s', $who, $event, $date); break;
+            case 'create' : return sprintf('%s a ajouté un évènement (%s) pour le %s', $who, $event, $date); break;
+        }
+    }
+
     /**
      * Lists all Event entities.
      *

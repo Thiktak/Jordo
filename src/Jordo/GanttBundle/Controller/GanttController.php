@@ -54,6 +54,8 @@ class GanttController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->get('Thiktak.core.notify')->log($entity);
+
             return $this->redirect($this->generateUrl('gantt_show', array('id' => $entity->getId())));
         }
 
