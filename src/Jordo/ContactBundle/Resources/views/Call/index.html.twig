@@ -59,8 +59,12 @@
                     {{ entity.addedBy }}
                   </a>
                 </td>
-                <td>{{ entity.info }}</td>
-                <td>{{ entity.dateStart|date('Y-m-d H:i:s') }}</td>
+                <td>
+                  <a href="{{ path('call_show', {id: entity.id}) }}">
+                    {{ entity.info }}
+                  </a>
+                </td>
+                <td><time title="{{ entity.dateStart|printDate }}"> il y a {{ entity.dateStart|timeAgo }}</time></td>
             </tr>
         {% endfor %}
         </tbody>

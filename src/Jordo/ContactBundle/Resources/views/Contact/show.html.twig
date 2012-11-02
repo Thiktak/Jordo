@@ -34,10 +34,10 @@
             
           <dl class="dl-horizontal" style="opacity: .5">
             <dt>Fiche créée le</dt>
-            <dd>{{ entity.dateCreated|date('Y-m-d H:i:s') }}&nbsp;</dd>
+            <dd>{{ entity.dateCreated|printDate }}&nbsp;</dd>
             
             <dt>Fiche modifée le</dt>
-            <dd>{{ entity.dateUpdated|date('Y-m-d H:i:s') }}&nbsp;</dd>
+            <dd>{{ entity.dateUpdated|printDate }}&nbsp;</dd>
           </dl>
         </div>
         

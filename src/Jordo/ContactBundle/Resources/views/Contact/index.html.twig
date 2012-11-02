@@ -51,7 +51,7 @@
                 <td>
                     {% if entity.infos %}
                     (x{{ entity.calls|length }})
-                    {% for call in entity.calls %}{{ loop.first ? call.dateStart|date('Y-m-d H:i:s') : null }}{% endfor %}
+                    {% for call in entity.calls %}{{ loop.first ? call.dateStart|printDate : null }}{% endfor %}
                     {% endif %}
                 </td>
             </tr>

@@ -15,7 +15,7 @@
         </tr>
         <tr>
             <th>Datecreated</th>
-            <td>{{ entity.dateCreated|date('Y-m-d H:i:s') }}</td>
+            <td>{{ entity.dateCreated|printDate }}</td>
         </tr>
         <tr>
             <th>Content</th>
@@ -27,23 +27,3 @@
         </tr>
     </tbody>
 </table>
-
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('comment') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('comment_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('comment_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>

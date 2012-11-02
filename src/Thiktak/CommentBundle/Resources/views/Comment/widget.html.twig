@@ -4,7 +4,7 @@
     <div class="rating">{{ entity.state }}</div>
     <div class="author">
       <a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity.user }}</a>
-      <span class="muted">{% if entity.dateCreated %}{{ entity.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</span>
+      <span class="muted">{% if entity.dateCreated %}{{ entity.dateCreated|printDate }}{% endif %}</span>
     </div>
     <div class="content">{{ entity.content }}</div>
   </article>

@@ -34,7 +34,7 @@
         <tr>
           <td>{{ entity }}</td>
           <td>
-            {{ entity.dateEnd|date('Y-m-d H:i:s') }}
+            {{ entity.dateEnd|printDate }}
             <progress min="{{ entity.dateStart|date('U') }}" max="{{ entity.dateEnd|date('U') }}" value="{{ 'now'|date('U') }}"></progress>
           </td>
           <td>{{ entity.dateEnd > 'now' ? 'en retard' : null }}</td>

@@ -10,7 +10,7 @@
     <hgroup>
       <h1><a href="{{ path('calendar') }}">Calendrier</a></h1>
       <h2>Evénement</h2>
-      <h3>le {{ entity.dateStart|date('Y-m-d H:i:s') }} - {{ entity.title }}</h3>
+      <h3>le {{ entity.dateStart|printDate }} - {{ entity.title }}</h3>
     </hgroup>
     <aside>
       <ul>
@@ -29,10 +29,10 @@
             <dd>{{ entity.title }}</dd>
 
             <dt>Du</dt>
-            <dd>{{ entity.dateStart|date('Y-m-d H:i:s') }}</dd>
+            <dd>{{ entity.dateStart|printDate }}</dd>
             
             <dt>au</dt>
-            <dd>{{ entity.dateEnd|date('Y-m-d H:i:s') }}</dd>
+            <dd>{{ entity.dateEnd|printDate }}</dd>
 
             <dt>ToDo ?</dt>
             <dd>{{ entity.isTodo ? 'oui' : 'non' }}</dd>
@@ -48,13 +48,13 @@
         <div class="span4 small">
           <dl class="dl-horizontal">
             <dt>Crée le</dt>
-            <dd>{{ entity.dateCreated|date('Y-m-d H:i:s') }}</dd>
+            <dd>{{ entity.dateCreated|printDate }}</dd>
             
             <dt>Par</dt>
             <dd><a href="{{ path('user_show', {id: entity.addedBy.id}) }}">{{ entity.addedBy }}</a></dd>
 
             <dt>Modifié le</dt>
-            <dd>{{ entity.dateUpdated|date('Y-m-d H:i:s') }}</dd>
+            <dd>{{ entity.dateUpdated|printDate }}</dd>
           </dl>
         </div>
       </div>

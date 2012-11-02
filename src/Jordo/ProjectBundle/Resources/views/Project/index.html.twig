@@ -32,14 +32,14 @@
           </tr>
       </thead>
       <tbody>
-      {% for entity in entities %}
-          <tr>
+      {% for i, entity in entities %}
+          <tr contextmenu="menu_project_{{ i }}">
               <td><a href="{{ path('project_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
               <td><a href="{{ path('project_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
-              <td>{{ '%.2f'|format(entity.budget + (entity.gantt ? entity.gantt.budget : 0)) }}</td>
+              <td>{{ '%.2f'|format(entity.budget + (entity.gantt ? entity.gantt.budget : 0)) }} €</td>
               <td>{{ entity.state ? ('state.' ~ entity.state)|trans : null }}</td>
-              <td>{% if entity.dateStart %}{{ entity.dateStart|date('Y-m-d H:i:s') }}{% endif %}</td>
-              <td>{% if entity.dateCreated %}{{ entity.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</td>
+              <td>{% if entity.dateStart %}{{ entity.dateStart|printDate }}{% endif %}</td>
+              <td>{% if entity.dateCreated %}{{ entity.dateCreated|printDate }}{% endif %}</td>
               <td class="small">
                 <a style="width: 35px; display: inline-block" title="{{ entity.team|length }} intervenant(s)">
                   <i class="icon-user"></i> {{ entity.team|length }}
@@ -56,6 +56,13 @@
       {% endfor %}
       </tbody>
     </table>
+
+    {% for i, entity in entities %}
+    <menu type="context" id="menu_project_{{ i }}">
+      <menuitem label="Voir le projet" onclick="window.location='{{ path('project_show', {id: entity.id}) }}';" icon=""></menuitem>
+      <menuitem label="Ajouter un projet" onclick="window.location='{{ path('project_new') }}';"></menuitem>
+    </menu>
+    {% endfor %}
   </article>
 </section>
 {% endblock %}

@@ -30,8 +30,8 @@
           {{ entity.specialType }}
         </td>
         <td>
-          {% if entity.dateStart %}<p>{{ entity.dateStart|date('Y-m-d H:i:s') }}</p>{% endif %}
-          {% if entity.dateEnd %}<p>{{ entity.dateEnd|date('Y-m-d H:i:s') }}</p>{% endif %}
+          {% if entity.dateStart %}<p>{{ entity.dateStart|printDate }}</p>{% endif %}
+          {% if entity.dateEnd %}<p>{{ entity.dateEnd|printDate }}</p>{% endif %}
 
           {% if entity.dateStart and entity.dateEnd %}<p>{#{ ((entity.dateEnd|format('U')) - (entity.dateStart|format('U')))|date('d\j H\h i\m s\s') }#}</p>{% endif %}
         </td>

@@ -51,7 +51,7 @@
                   </a>
                 </td>
                 <td>{{ entity.title }}</td>
-                <td>{% if entity.dateAdded %}{{ entity.dateAdded|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.dateAdded %}{{ entity.dateAdded|printDate }}{% endif %}</td>
                 <td>
                     {% set state = getStateOfComments('JordoDocumentBundle:Document', entity.id) %}
                     <span class="label label2-{{ state }}">{{ state|default(' - ') }}</span>

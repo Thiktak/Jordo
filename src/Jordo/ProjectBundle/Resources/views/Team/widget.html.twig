@@ -9,10 +9,17 @@
           </header>
           <ul>
             {% for entity in entities %}
-            <li>
+            <li contextmenu="menu_team_{{ entity.id }}">
               <a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity }}</a>
               <a href="{{ path('project_team_show', {project: project.id, id: entity.id}) }}" class="label pull-right">{{ entity.jeh }}</a>
             </li>
             {% endfor %}
           </ul>
         </article>
+
+        {% for i, entity in entities %}
+        <menu type="context" id="menu_team_{{ entity.id }}">
+          <menuitem label="Voir le profil de {{ entity.user }}" onclick="window.location='{{ path('user_show', {id: entity.user.id}) }}';" icon=""></menuitem>
+          <menuitem label="Modifier son travail/JEH" onclick="window.location='{{ path('project_team_show', {id: entity.id}) }}';"></menuitem>
+        </menu>
+        {% endfor %}

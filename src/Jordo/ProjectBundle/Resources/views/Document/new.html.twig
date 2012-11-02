@@ -1,16 +1,26 @@
-<h1>Document creation</h1>
+{% extends "ThiktakCoreBundle::layout.html.twig" %}
 
-<form action="{{ path('project_document_create') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit">Create</button>
-    </p>
-</form>
+{% block menu %}
+  {% render "JordoProjectBundle:Project:menu" %}
+{% endblock %}
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('project_document') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% block body %}
+<section>
+  <header>
+    <hgroup>
+      <h1><a href="{{ path('project') }}">Projets</a></h1>
+      <h2>Document</h2>
+      <h3>Nouveau document</h3>
+    </hgroup>
+  </header>
+
+  <article class="wbox">
+    <form action="{{ path('project_document_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+  </article>
+</section>
+{% endblock %}

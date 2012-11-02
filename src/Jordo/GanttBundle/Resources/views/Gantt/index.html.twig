@@ -27,7 +27,7 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('gantt_show', { 'id': entity.id }) }}">{{ entity }}</a></td>
-                <td>{% if entity.dateStart %}{{ entity.dateStart|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.dateStart %}{{ entity.dateStart|printDate }}{% endif %}</td>
                 <td>
                     <ul>
                         <li>

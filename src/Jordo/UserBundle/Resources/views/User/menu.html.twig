@@ -7,12 +7,16 @@
       {% for key, filter in filters %}
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          {{ key ~ '.' ~ filter.getSelected() }}
+          {% set msg = transExists('filter.' ~ key ~ '.' ~ filter.getSelected()) %}
+          {{ msg ? msg : (('filter.' ~ key)|trans ~ ' : ' ~ filter.getSelected()|trans) }}
           <span class="caret pull-right"></span>
         </a>
         <ul class="dropdown-menu pull-right">
           {% for item, selected in filter %}
-          <li class="{{ selected ? 'active' : null }}"><a href="{{ path('user_filter', {type: key, filter: item}) }}">{{ item }}</a></li>
+          <li class="{{ selected ? 'active' : null }}">
+            {% set msg = transExists('filter.' ~ key ~ '.' ~ item) %}
+            <a href="{{ path('user_filter', {type: key, filter: item}) }}">{{ msg ? msg : item|trans }}</a>
+          </li>
           {% endfor %}
         </ul>
       </li>

@@ -66,8 +66,8 @@
 
           <dt>Dates</dt>
           <dd>
-            du {{ entity.dateStart|date('Y-m-d H:i:s') }}<br />
-            au {{ entity.dateCreated|date('Y-m-d H:i:s') }}
+            du {{ entity.dateStart|printDate }}<br />
+            au {{ entity.dateCreated|printDate }}
           </dd>
 
           <dt>Client</dt>
