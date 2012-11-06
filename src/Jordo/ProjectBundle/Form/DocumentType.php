@@ -12,9 +12,7 @@ class DocumentType extends AbstractType
     {
         $builder
             ->add('project')
-            ->add('title')
-            ->add('dateAdded')
-            ->add('path')
+            ->add('document')
             ->add('doctype')
         ;
     }

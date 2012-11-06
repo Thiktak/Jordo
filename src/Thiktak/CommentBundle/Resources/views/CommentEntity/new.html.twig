@@ -1,0 +1,11 @@
+<form action="{{ path('commententity_create', {object: object, id: id}) }}" method="post" class="comment" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+
+    {{ form_row(form.content) }}
+    {{ form_row(form.state) }}
+
+    {{ form_rest(form) }}
+    <div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>

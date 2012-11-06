@@ -27,6 +27,7 @@
                 <th>Type</th>
                 <th>Adresse</th>
                 <th>Dernier contact</th>
+                <th style="width: 100px">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -49,10 +50,36 @@
                 <td>{{ entity.type }}</td>
                 <td>{{ entity.addr }}</td>
                 <td>
+                  {% set callback = null %}
+                  {% if entity.infos %}
+                    {% for call in entity.calls %}
+                      {% if loop.first %}
+                        {% set callback = call.dateCallback %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
                     {% if entity.infos %}
-                    (x{{ entity.calls|length }})
-                    {% for call in entity.calls %}{{ loop.first ? call.dateStart|printDate : null }}{% endfor %}
+                    {% for call in entity.calls %}{{ loop.first ? call.dateStart|timeAgo : null }}{% endfor %}
                     {% endif %}
+                </td>
+                <td>
+                  {% if callback and callback <= 'now'|date %}
+                  <a class="small" style="width: 20px; display: inline-block" title="A rappeler le {{ callback|printDate }}">
+                    <i class="icon-bookmark"></i>
+                  </a>
+                  {% else %}
+                  <a class="small" style="width: 20px; display: inline-block">
+                    <i class="icon-bookmark icon-white"></i>
+                  </a>
+                  {% endif %}
+                  <a class="small" style="width: 30px; display: inline-block" title="{{ entity.projects|length }} projet(s)">
+                    <i class="icon-book"></i>
+                    {{ entity.projects|length }}
+                  </a>
+                  <a class="small" style="width: 30px; display: inline-block" title="{{ entity.calls|length }} appel(s)">
+                    <i class="icon-bell"></i>
+                    {{ entity.calls|length }}
+                  </a>
                 </td>
             </tr>
         {% endfor %}

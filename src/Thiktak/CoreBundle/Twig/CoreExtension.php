@@ -30,14 +30,21 @@ class CoreExtension extends \Twig_Extension
 
     function timeAgo($tm, $rcs = 0) {
        $tm = $tm instanceof \DateTime ? $tm : new \DateTime($tm);
-       $cur_tm = time(); $dif = $cur_tm-$tm->format('U');
+       $tm = $tm->format('U');
+       $cur_tm = time();
+
+       $sign = $cur_tm > $tm;
+
+       list($tm, $cur_tm) = array(min($tm, $cur_tm), max($tm, $cur_tm));
+
+       $dif = $cur_tm-$tm; $cur_tm = abs($cur_tm);
        $pds = array('seconde','minute','heure','jour','semaine','mois','année','decade');
        $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
        for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
 
        $no = floor($no); if($no <> 1) $pds[$v] .='s'; $x=sprintf("%d %s ",$no,$pds[$v]);
        if(($rcs == 1)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= time_ago($_tm);
-       return str_replace('ss', 's', $x);
+       return ($sign ? 'Il y a' : 'Dans ') . ' ' . str_replace('ss', 's', $x);
     }
 
     public function printDate($DateTime = null, $short = true, $format = null)

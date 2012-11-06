@@ -22,8 +22,8 @@
       </article>
 
       <section class="span10">
-        <ul>
-          {% for result in resultsAll %}
+        <ul class="jordo-search-results">
+          {% for r, result in resultsAll %}
             <li class="{{ result.class }}">
               {{ result.render|raw }}
             </li>
@@ -33,4 +33,11 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+      .jordo-search-results { margin: 0; padding: 0; }
+      .jordo-search-results li { margin: 0; padding: 0; list-style-type: none; }
+    </style>
 {% endblock %}

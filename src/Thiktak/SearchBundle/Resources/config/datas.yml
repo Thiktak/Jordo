@@ -1,0 +1,1 @@
+{ motor: { Jordo\UserBundle\Controller\SearchController: Search, Jordo\ContactBundle\Controller\SearchController: Search } }

@@ -36,13 +36,6 @@ class Document
     private $dateCreated;
 
     /**
-     * @var \DateTime $dateAdded
-     *
-     * @ORM\Column(name="date_added", type="datetime")
-     */
-    private $dateAdded;
-
-    /**
      * @var string $path
      *
      * @ORM\Column(name="path", type="string", length=255)
@@ -60,6 +53,11 @@ class Document
     protected $doctype;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\Jordo\DocumentBundle\Entity\Document", inversedBy="document")
+     */
+    protected $document;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Jordo\ProjectBundle\Entity\Project", inversedBy="documents")
      */
     protected $project;
@@ -69,6 +67,22 @@ class Document
     {
         $this->dateCreated = $this->dateCreated ?: new \DateTime();
         $this->dateAdded   = $this->dateAdded   ?: new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return (string) $this->title;
+    }
+
+    public function getState()
+    {
+        /*//$list = array('ok', 'progress', 'warning', 'error');
+
+        foreach( $this->getComments() as $comment )
+            if( $comment->getState() )
+                return $comment->getState();
+
+        return null;*/
     }
 
     /**
@@ -217,5 +231,28 @@ class Document
     public function getDoctype()
     {
         return $this->doctype;
+    }
+
+    /**
+     * Set project
+     *
+     * @param Jordo\ProjectBundle\Entity\Project $project
+     * @return Document
+     */
+    public function setProject(\Jordo\ProjectBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+    
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return Jordo\ProjectBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

@@ -10,6 +10,7 @@
     <hgroup>
       <h1>Documents</h1>
       <h2>Liste des documents</h2>
+      <h3>{{ path }} ({{  entities|length }})</h3>
     </hgroup>
     <aside>
       <ul>
@@ -37,8 +38,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th colspan="2">Title</th>
-                <th>Date d'ajout</th>
+                <th>Title</th>
+                <th style="width: 150px">Date d'ajout</th>
+                <th style="width: 70px">Revision</th>
                 <th>#</th>
             </tr>
         </thead>
@@ -46,15 +48,18 @@
         {% for entity in entities %}
             <tr>
                 <td>
+                  <a href="{{ path('document', {path: entity.path}) }}" class="muted small pull-right">{{ entity.path }}/</a>
                   <a href="{{ path('document_show', { 'id': entity.id }) }}">
-                    <span class="muted">{{ entity.path }}</span>
+                    {{ entity.title }}
                   </a>
                 </td>
-                <td>{{ entity.title }}</td>
                 <td>{% if entity.dateAdded %}{{ entity.dateAdded|printDate }}{% endif %}</td>
+                <td style="text-align: center; font-size: .75em; line-height: 1em">
+                  {{ entity.revision }}<br />
+                  <span class="muted">{{ entity.action }}</span>
+                </td>
                 <td>
-                    {% set state = getStateOfComments('JordoDocumentBundle:Document', entity.id) %}
-                    <span class="label label2-{{ state }}">{{ state|default(' - ') }}</span>
+                    <span class="label label2-{{ entity.state }}">{{ entity.state|default(' - ') }}</span>
                 </td>
             </tr>
         {% endfor %}

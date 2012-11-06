@@ -28,7 +28,7 @@ class ProjectType extends AbstractType
             ->add('description')
             ->add('contexte')
             ->add('demande')
-            ->add('dateStart')
+            ->add('dateStart', 'date')
             ->add('gantt', null, array(
                 'required'  => false,
             ))

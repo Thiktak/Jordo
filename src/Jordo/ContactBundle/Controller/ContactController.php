@@ -62,10 +62,11 @@ class ContactController extends Controller
         });
         $t->filters['contact'] -> register('again',   function($entity) {
             return $entity->leftjoin('c.infos', 'i1')
-                          ->leftjoin('i1.calls', 'ca1')
-                          ->GroupBy('c.id')
-                          //->andWhere('ca1.dateCallback >= CURRENT_TIMESTAMP()')
-                          ->andHaving('COUNT(ca1.id) > 0');
+                          //->leftjoin('i1.calls', 'ca1')
+                          ->groupBy('ca.id, c.id')
+                          ->andWhere('ca.dateCallback >= CURRENT_TIMESTAMP()')
+                          ->andHaving('COUNT(ca.id) > 0')
+                          ;
         });
 
 

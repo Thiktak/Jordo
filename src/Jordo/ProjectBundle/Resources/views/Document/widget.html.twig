@@ -30,10 +30,10 @@
     </li>
     {% for entity in entities %}
     <li class="row-fluid">
-      <div class="span5"><a href="{{ path('project_document_show', {id: entity.id}) }}">{{ entity.title }}</a></div>
+      <div class="span5"><a href="{{ path('project_document_show', {id: entity.id}) }}">{{ entity.document.title }}</a></div>
       <div class="span2"><span class="label">{{ getStateOfComments('JordoProjectBundle:Document', entity.id) }}</span></div>
       <div class="span2"><a href="{{ path('user_show', {id: entity.user.id}) }}">{{ entity.user }}</a></div>
-      <div class="span3">{{ entity.dateAdded|printDate }}</div>
+      <div class="span3">{{ entity.document.dateAdded|printDate }}</div>
     </li>
     <li class="row-fluid">
       <div class="span11 pull-right" style="margin-right: .5em">

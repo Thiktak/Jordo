@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <th>Path</th>
-                <td>{{ entity.path }}</td>
+                <td><a href="{{ path('document', {path: entity.path}) }}">{{ entity.path }}</a></td>
             </tr>
             <tr>
                 <th>Par</th>
@@ -45,13 +45,22 @@
             </tr>
             <tr>
                 <th>Etat</th>
-                <td>{{ getStateOfComments('JordoDocumentBundle:Document', entity.id) }}</td>
+                <td>{{ entity.state }}</td>
             </tr>
         </tbody>
     </table>
   </article>
 
-  {% render "ThiktakCommentBundle:Comment:widget" with {object: 'JordoDocumentBundle:Document', id: entity.id} %}
+  {% for revision in revisions %}
+  <article class="wbox">
+    <header>
+      <span class="pull-right label">{{ revision.state }}</span>
+      <h1><a href="{{ path('document_show', {id: revision.id}) }}">Révision {{ revision.revision }}</a> par {{ revision.user|default('?') }}</h1>
+    </header>
+    <div class="well">{{ revision.description }}</div>
+    {% render "ThiktakCommentBundle:CommentEntity:widget" with {object: 'JordoDocumentBundle:Document', id: revision.id} %}
+  </article>
+  {% endfor %}
 
 </section>
 {% endblock %}

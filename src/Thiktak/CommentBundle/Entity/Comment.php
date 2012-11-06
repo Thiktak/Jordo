@@ -24,14 +24,14 @@ class Comment
     /**
      * @var string $type
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
      * @var integer $typeId
      *
-     * @ORM\Column(name="typeId", type="integer")
+     * @ORM\Column(name="typeId", type="integer", nullable=true)
      */
     private $typeId;
 

@@ -1,0 +1,22 @@
+{% extends "JordoUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<div class="modal" tabindex="-1">
+  <div class="modal-header">
+    <div class="content"><h3>{{ user }}</h3></div>
+  </div>
+  <div class="modal-body fos_user_user_show">
+    <dl class="dl-horizontal">
+      <dt>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}</dt>
+      <dd>{{ user.username }}</dd>
+
+      <dt>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</dt>
+      <dd>{{ user.email }}</dd>
+    </dl>
+  </div>
+  <div class="modal-footer">
+    <a href="{{ path('fos_user_resetting_request') }}" class="btn btn-primary">Modifier mon mot de passe</a>
+    <a href="{{ path('user_show', {id: user.id}) }}" class="btn btn-success">Voir mon profil</a>
+  </div>
+</div>
+{% endblock %}

@@ -22,32 +22,11 @@ class Document
     private $id;
 
     /**
-     * @var string $title
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-
-    /**
      * @var \DateTime $dateCreated
      *
      * @ORM\Column(name="date_created", type="datetime")
      */
     private $dateCreated;
-
-    /**
-     * @var \DateTime $dateAdded
-     *
-     * @ORM\Column(name="date_added", type="datetime")
-     */
-    private $dateAdded;
-
-    /**
-     * @var string $path
-     *
-     * @ORM\Column(name="path", type="string", length=255)
-     */
-    private $path;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Jordo\UserBundle\Entity\User", inversedBy="user")
@@ -60,6 +39,11 @@ class Document
     protected $doctype;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\Jordo\DocumentBundle\Entity\Document", inversedBy="document")
+     */
+    protected $document;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Jordo\ProjectBundle\Entity\Project", inversedBy="documents")
      */
     protected $project;
@@ -68,12 +52,11 @@ class Document
     public function __construct()
     {
         $this->dateCreated = $this->dateCreated ?: new \DateTime();
-        $this->dateAdded   = $this->dateAdded   ?: new \DateTime();
     }
 
     public function __toString()
     {
-        return (string) $this->title;
+        return (string) $this->getDocument()->getTitle();
     }
 
     public function getState()
@@ -98,29 +81,6 @@ class Document
     }
 
     /**
-     * Set title
-     *
-     * @param string $title
-     * @return Document
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * Set dateCreated
      *
      * @param \DateTime $dateCreated
@@ -141,52 +101,6 @@ class Document
     public function getDateCreated()
     {
         return $this->dateCreated;
-    }
-
-    /**
-     * Set dateAdded
-     *
-     * @param \DateTime $dateAdded
-     * @return Document
-     */
-    public function setDateAdded($dateAdded)
-    {
-        $this->dateAdded = $dateAdded;
-    
-        return $this;
-    }
-
-    /**
-     * Get dateAdded
-     *
-     * @return \DateTime 
-     */
-    public function getDateAdded()
-    {
-        return $this->dateAdded;
-    }
-
-    /**
-     * Set path
-     *
-     * @param string $path
-     * @return Document
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    
-        return $this;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string 
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -256,5 +170,28 @@ class Document
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Set document
+     *
+     * @param Jordo\DocumentBundle\Entity\Document $document
+     * @return Document
+     */
+    public function setDocument(\Jordo\DocumentBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+    
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return Jordo\DocumentBundle\Entity\Document 
+     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 }

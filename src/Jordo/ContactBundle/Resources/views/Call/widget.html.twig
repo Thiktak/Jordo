@@ -12,11 +12,12 @@
       <tr>
         <th>#</th>
         <th>Type</th>
-        <th>Date</th>
         <th>Qui</th>
         <th>Title</th>
         <th>Description</th>
         <th>Infoused</th>
+        <th>Date</th>
+        <th>Rappel</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -29,16 +30,21 @@
         <td>
           {{ entity.specialType }}
         </td>
+        <td><a href="{{ path('user_show', {id: entity.addedBy.id}) }}">{{ entity.addedBy }}</a></td>
+        <td>{{ entity.title }}</td>
+        <td>{{ entity.description }}</td>
+        <td>{{ entity.info }}</td>
         <td>
           {% if entity.dateStart %}<p>{{ entity.dateStart|printDate }}</p>{% endif %}
           {% if entity.dateEnd %}<p>{{ entity.dateEnd|printDate }}</p>{% endif %}
 
           {% if entity.dateStart and entity.dateEnd %}<p>{#{ ((entity.dateEnd|format('U')) - (entity.dateStart|format('U')))|date('d\j H\h i\m s\s') }#}</p>{% endif %}
         </td>
-        <td><a href="{{ path('user_show', {id: entity.addedBy.id}) }}">{{ entity.addedBy }}</a></td>
-        <td>{{ entity.title }}</td>
-        <td>{{ entity.description }}</td>
-        <td>{{ entity.info }}</td>
+        <td>
+          {% if entity.dateCallback %}
+          <time title="{{ entity.dateCallback|printDate }}">{{ entity.dateCallback|timeAgo }}</time>
+          {% endif %}
+        </td>
         <td class="actions">
           <ul class="list">
             <li>

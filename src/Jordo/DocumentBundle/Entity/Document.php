@@ -24,9 +24,30 @@ class Document
     /**
      * @var string $title
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
+
+    /**
+     * @var integer $revision
+     *
+     * @ORM\Column(name="revision", type="integer", nullable=true)
+     */
+    private $revision;
+
+    /**
+     * @var integer $action
+     *
+     * @ORM\Column(name="action", type="string", length=20, nullable=true)
+     */
+    private $action;
+
+    /**
+     * @var integer $description
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
 
     /**
      * @var \DateTime $dateCreated
@@ -45,14 +66,27 @@ class Document
     /**
      * @var string $path
      *
-     * @ORM\Column(name="path", type="string", length=255)
+     * @ORM\Column(name="path", type="text")
      */
     private $path;
+
+    /**
+     * @var string $source
+     *
+     * @ORM\Column(name="source", type="string", length=255)
+     */
+    private $source;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Jordo\UserBundle\Entity\User", inversedBy="user")
      */
     protected $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Thiktak\CommentBundle\Entity\Comment")
+     * @ORM\OrderBy({"id"="DESC"})
+     */
+    protected $comments;
 
 
     public function __construct()
@@ -63,7 +97,14 @@ class Document
 
     public function __toString()
     {
-        return (string) $this->title;
+        return (string) $this->getPath() . '/' . $this->getTitle();
+    }
+
+    public function getState()
+    {
+        foreach( $this->getComments() as $comment )
+            if( $comment->getState() )
+                return $comment->getState();
     }
 
     /**
@@ -96,6 +137,9 @@ class Document
      */
     public function getTitle()
     {
+        if( empty($this->title) )
+            return basename($this->path);
+
         return $this->title;
     }
 
@@ -189,5 +233,130 @@ class Document
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set revision
+     *
+     * @param integer $revision
+     * @return Document
+     */
+    public function setRevision($revision)
+    {
+        $this->revision = $revision;
+    
+        return $this;
+    }
+
+    /**
+     * Get revision
+     *
+     * @return integer 
+     */
+    public function getRevision()
+    {
+        return $this->revision;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     * @return Document
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Document
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     * @return Document
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+    
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return string 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param Thiktak\CommentBundle\Entity\Comment $comments
+     * @return Document
+     */
+    public function addComment(\Thiktak\CommentBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param Thiktak\CommentBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Thiktak\CommentBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

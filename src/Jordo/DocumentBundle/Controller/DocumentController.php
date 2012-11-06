@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Jordo\DocumentBundle\Entity\Document;
 use Jordo\DocumentBundle\Form\DocumentType;
+use Doctrine\ORM\Query;
 
 /**
  * Document controller.
@@ -17,6 +18,73 @@ use Jordo\DocumentBundle\Form\DocumentType;
  */
 class DocumentController extends Controller
 {
+    /**
+     * @Route("/cron", name="document_cron")
+     */
+    public function cron()
+    {
+        set_time_limit(0);
+
+        $em = $this->getDoctrine()->getManager();
+        
+        # On récupère les anciens fichiers
+        $listOfAllDocs = array();
+        $entities = $em->getRepository('JordoDocumentBundle:Document')->createQueryBuilder('d')
+            ->orderBy('d.path', 'ASC')
+            ->getQuery()->getResult();
+
+        foreach( $entities as $doc )
+            $listOfAllDocs[trim($doc->getPath(), '/') . '/' . trim($doc->getTitle(), '/')][$doc->getRevision()][$doc->getAction() ?: 'added'] = $doc;
+
+        $oSVN = new SVNLastCommits('svn.iariss.fr', 'g.olivares', 'yh7gtzx');
+        $SVN  = $oSVN -> open(4600, 'IARISS/trunk');
+
+        echo '<pre>', print_r($SVN), '</pre>';
+
+        foreach( $SVN as $document ) {
+            foreach( array('added', 'deleted', 'modified', 'replaced') as $type )
+            {
+                if( isset($document->{$type . '-path'}) )
+                    foreach( $document->{$type . '-path'} as $doc )
+                    {
+                        if( !isset($listOfAllDocs[ (string) $doc ][ (int) $document->{'version-name'} ][ $type ]) ) {
+                            $o = new Document();
+                            $o -> setSource('https://svn.iariss.fr/IARISS');
+                        }
+                        else
+                            $o = $listOfAllDocs[ (string) $doc ][ (int) $document->{'version-name'} ][ $type ];
+
+                        if( pathinfo((string) $doc, PATHINFO_EXTENSION) )
+                        {
+                            $o -> setPath(pathinfo((string) $doc, PATHINFO_DIRNAME));
+                            $o -> setTitle(pathinfo((string) $doc, PATHINFO_BASENAME));
+                        }
+                        else
+                            $o -> setPath((string) $doc);
+
+                        $o -> setRevision((int) $document->{'version-name'});
+                        $o -> setAction($type);
+                        $o -> setDescription((string) $document->{'comment'});
+
+                        $date = new \DateTime((string) $document->{'date'});
+                        $o -> setDateAdded($date);
+
+                        $oUser = $em->getRepository('JordoUserBundle:User')->findOneByUsername((string) $document->{'creator-displayname'});
+                        if( $oUser )
+                            $o->setUser($oUser);
+
+                        $em->persist($o);
+
+                        echo '<div>', strtoupper($type), ': ', (string) $doc, ' (', $date->format('Y-m-d H:i:s'), ')</div>';
+                    }
+            }
+        }
+
+        //$em->flush();
+        exit();
+    }
+
+
     static function applyFilters($t, $entities)
     {
         $userId = $t->get('security.context')->getToken()->getUser()->getId();
@@ -56,6 +124,7 @@ class DocumentController extends Controller
     public function menuAction()
     {
         $path = trim($this->getRequest()->get('path'), '/');
+        $path = ($path ? '/' : null) . $path;
 
         $paths = array(); // ? array( realpath($path . '/../') => '@' . trim($path, '/') ) : array();
 
@@ -70,14 +139,15 @@ class DocumentController extends Controller
             ->getRepository('JordoDocumentBundle:Document')
             ->createQueryBuilder('d')
             ->where('d.path LIKE :path')
-            ->setParameter('path', '' . $path  . ($path ? '/' : null) . '%')
+            ->setParameter('path', $path  . ($path ? '/' : null) . '%')
             ->orderBy('d.path', 'ASC')
             ->getQuery()
             ->getResult();
 
         foreach( $entities as $entity ) {
-            $p = strstr(preg_replace('`^' . $path . '/?`', null, $entity->getPath()), '/', true);
-            $paths[trim($path . '/' . $p, '/')] = $p;
+            $p = strstr(preg_replace('`^' . $path . '/?`', null, $entity->getPath() . '/'), '/', true);
+            if( $p )
+                $paths[trim($path . '/' . $p, '/')] = $p;
         }
 
         return compact('paths');
@@ -91,28 +161,44 @@ class DocumentController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction($sort = 'dir')
+    public function indexAction()
     {
         $path = trim($this->getRequest()->get('path'), '/');
-
-        if( !in_array($sort, array('dir', 'last', 'read')) )
-            throw new \Exception('Système de tri innexistant.');
+        $path = ($path ? '/' : null) . $path;
 
         $em = $this->getDoctrine()->getManager();
 
         $documentRepository = $entities = $em->getRepository('JordoDocumentBundle:Document');
 
         $entities = $documentRepository->createQueryBuilder('d')->select('d');
-        self::applyFilters($this, $entities);
+        //self::applyFilters($this, $entities);
         $entities = $entities
-            ->andWhere('d.path LIKE :path')
-            ->setParameter('path', $path  . ($path ? '/' : null) . '%')
+            ->select('d, c')
+            ->leftjoin('d.comments', 'c')
+            ->groupBy('d.path, d.title, d.revision')
+            ->andWhere('d.path LIKE :path AND d.title IS NOT NULL')
+            ->setParameter('path', $path . '%')
+            ->addOrderBy('d.path', 'ASC')
+            ->addOrderBy('d.title', 'ASC')
+            ->addOrderBy('d.revision', 'ASC')
             ->getQuery()
             ->getResult();
 
+        $entities2 = array();
+        foreach( $entities as $entity ) {
+            $i = $entity->getPath() . '/' . $entity->getTitle();
+            if( !isset($entities2[$i]) OR $entities2[$i]->getRevision() < $entity->getRevision() ) {
+                if( $entity->getAction() == 'deleted' )
+                    unset($entities2[$i]);
+                else
+                    $entities2[$i] = $entity;
+            }
+        }
+
         return array(
-            'filters'  => $this->filters,
-            'entities' => $entities,
+            'filters'  => array(), //$this->filters,
+            'entities' => $entities2,
+            'path'     => $path,
         );
     }
 
@@ -177,16 +263,24 @@ class DocumentController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('JordoDocumentBundle:Document')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Document entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $revisions = $em->getRepository('JordoDocumentBundle:Document')->findBy(array(
+            'path'  => $entity->getPath(),
+            'title' => $entity->getTitle(),
+        ), array('revision' => 'DESC'));
+
+        $max = current($revisions);
+        $max = $max->getId();
+
+        if( $id != $max )
+            return $this->redirect($this->generateUrl('document_show', array('id' => $max)));
 
         return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entity'    => $entity,
+            'revisions' => $revisions,
         );
     }
 
@@ -291,4 +385,61 @@ class DocumentController extends Controller
             ->getForm()
         ;
     }
+}
+
+
+
+Class SVNLastCommits
+{
+  protected $host;
+  protected $username;
+  protected $password;
+  protected $port = 443;
+  protected $path = '/';
+  
+  public function __construct($host, $username = null, $password = null)
+  {
+    $this -> host = $host;
+    $this -> username = $username;
+    $this -> password = $password;
+  }
+  
+  public function setPath($path)
+  {
+    $this -> path = $path;
+  }
+  
+  public function open($start_revision, $path = null)
+  {
+    // http://svn.apache.org/repos/asf/subversion/trunk/notes/http-and-webdav/webdav-protocol
+    $request =
+    '<?xml version="1.0"?>'.
+    '<S:log-report xmlns:S="svn:">'.
+      '<S:start-revision>'.$start_revision.'</S:start-revision>'.
+      '<S:discover-changed-paths/>'.
+    '</S:log-report>';
+
+    $header =
+    "REPORT /".trim($path ?: ($this->path), ' /')." HTTP/1.1\r\n".
+    "Host: ".$this->host."\r\n".
+    "Depth: 1\r\n".
+    "User-Agent: PHP-Code\r\n".
+    "Content-type: text/xml\r\n".
+    "Content-length: ".strlen($request)."\r\n".
+    "Authorization: Basic ".base64_encode($this->username . ':' . $this->password)."\r\n".
+    "\r\n";
+
+    $sock = fsockopen("ssl://".$this->host, $this->port);
+    if(!$sock) return false;
+    if(!fputs($sock, $header.$request)) return false;
+
+    $str = stream_get_contents($sock);
+    $code = substr($str, strpos($str, ' ')+1, 3);
+    if($code != 200) return false;
+
+    $str = substr($str, strpos($str, "<"));
+    $str = substr($str, 0, strrpos($str, ">")+1);
+    $str = str_replace(array('<S:', '</S:', '<D:', '</D:'), array('<', '</', '<', '</'), $str);
+    return simplexml_load_string($str);
+  }
 }

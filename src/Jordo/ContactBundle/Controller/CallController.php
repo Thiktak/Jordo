@@ -96,6 +96,7 @@ class CallController extends Controller
                                ->join('i.contact', 'co')
                                ->where('co.id = :id')
                                ->setParameter('id', $id)
+                               ->orderBy('c.dateStart', 'DESC')
                                ->getQuery()
                                ->getResult();
                                //addedBy' => $id);

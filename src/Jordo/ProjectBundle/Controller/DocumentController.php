@@ -143,11 +143,17 @@ class DocumentController extends Controller
             throw $this->createNotFoundException('Unable to find Document entity.');
         }
 
+        $revisions = $em->getRepository('JordoDocumentBundle:Document')->findBy(array(
+            'path'  => $entity->getDocument()->getPath(),
+            'title' => $entity->getDocument()->getTitle(),
+        ), array('revision' => 'DESC'));
+
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'revisions'   => $revisions,
         );
     }
 
